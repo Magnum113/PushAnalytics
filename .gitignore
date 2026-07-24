@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+node_modules/
+.venv/
+__pycache__/
+*.py[cod]
+dist/
+tmp/
+data/raw/
+data/catalog/
+dashboard/public/data/dashboard.json
+dashboard/public/data/supabase-config.json
+dashboard/output/
+dashboard/.playwright-cli/
