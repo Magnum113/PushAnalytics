@@ -228,20 +228,28 @@ export default function TriggerPushesPage() {
     [data.messages],
   );
 
-  const visible = useMemo(() => {
-    const normalized = query.trim().toLocaleLowerCase("ru");
-    return data.messages
-      .filter((message) => {
+  const projectMessages = useMemo(
+    () =>
+      data.messages.filter((message) => {
         const daily = dailyTotals(message, period, data.sourceCoverageEnd);
         return (
           daily.participants > 0 &&
-          (projectId === "all" || message.projectId === projectId) &&
-          (!normalized ||
-            `${message.scenarioName} ${message.name} ${message.title} ${message.body}`
-              .toLocaleLowerCase("ru")
-              .includes(normalized))
+          (projectId === "all" || message.projectId === projectId)
         );
-      })
+      }),
+    [data.messages, data.sourceCoverageEnd, period, projectId],
+  );
+
+  const visible = useMemo(() => {
+    const normalized = query.trim().toLocaleLowerCase("ru");
+    return projectMessages
+      .filter(
+        (message) =>
+          !normalized ||
+          `${message.scenarioName} ${message.name} ${message.title} ${message.body}`
+            .toLocaleLowerCase("ru")
+            .includes(normalized),
+      )
       .sort((a, b) => {
         const orderDifference =
           orderTotals(b, period, goalId, orderProjectId).orders -
@@ -252,15 +260,15 @@ export default function TriggerPushesPage() {
           new Date(a.lastActivityAt ?? 0).getTime()
         );
       });
-  }, [
-    data.messages,
-    data.sourceCoverageEnd,
-    goalId,
-    orderProjectId,
-    period,
-    projectId,
-    query,
-  ]);
+  }, [goalId, orderProjectId, period, projectMessages, query]);
+
+  const selectedProject = data.projects.find(
+    (project) => project.id === projectId,
+  );
+  const projectScopeName =
+    projectId === "all"
+      ? "Все проекты"
+      : (selectedProject?.name ?? "Выбранный проект");
 
   const totals = useMemo(
     () =>
@@ -317,7 +325,7 @@ export default function TriggerPushesPage() {
   const resolvedOrders = exactSelectionMetric?.orders ?? totals.orders;
   const resolvedBuyers = exactSelectionMetric?.buyers ?? totals.buyers;
   const resolvedRevenue = exactSelectionMetric?.revenue ?? totals.revenue;
-  const bestByOrder = visible
+  const bestByOrder = projectMessages
     .filter(
       (message) =>
         orderTotals(message, period, goalId, orderProjectId).orders > 0,
@@ -332,7 +340,7 @@ export default function TriggerPushesPage() {
           Math.max(aDaily.clicked, 1)
       );
     })[0];
-  const bestByCtr = [...visible].sort((a, b) => {
+  const bestByCtr = [...projectMessages].sort((a, b) => {
     const aDaily = dailyTotals(a, period, data.sourceCoverageEnd);
     const bDaily = dailyTotals(b, period, data.sourceCoverageEnd);
     return (
@@ -527,7 +535,13 @@ export default function TriggerPushesPage() {
         <section className="trigger-signal">
           <div>
             <span className="signal-label">
-              {bestByOrder ? "Лучше конвертирует" : "Сигнал по отклику"}
+              {bestByOrder
+                ? projectId === "all"
+                  ? "Лучший пуш среди всех проектов"
+                  : "Лучший пуш в выбранном проекте"
+                : projectId === "all"
+                  ? "Сигнал по всем проектам"
+                  : "Сигнал по выбранному проекту"}
             </span>
             <h2>
               {(bestByOrder ?? bestByCtr)?.title ||
@@ -556,10 +570,12 @@ export default function TriggerPushesPage() {
             </p>
           </div>
           <div className="trigger-signal-note">
-            <strong>Честное сравнение</strong>
+            <strong>{projectScopeName}</strong>
             <span>
-              Заказ получает последний клик среди массовых, trigger и
-              transaction MobilePush за 24 часа.
+              {projectId === "all"
+                ? "Сейчас сравниваются trigger-пуши всех проектов."
+                : "В рейтинге участвуют только trigger-пуши этого проекта."}{" "}
+              Заказ получает последний MobilePush-клик за 24 часа.
             </span>
           </div>
         </section>
