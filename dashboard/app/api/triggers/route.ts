@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 
-import { supabaseRows } from "@/lib/supabase-server";
+import {
+  applyPushOverride,
+  mapOverrides,
+  PUSH_OVERRIDES_SELECT,
+  type PushManualOverrideRow,
+} from "@/lib/push-overrides";
+import { pgMetaQuery, supabaseRows } from "@/lib/supabase-server";
 
 type ProjectRow = { id: string; name: string; short_name: string };
 type GoalRow = ProjectRow;
@@ -69,7 +75,15 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const [projects, goals, scenarios, mailings, dailyRows, orders] =
+    const [
+      projects,
+      goals,
+      scenarios,
+      mailings,
+      dailyRows,
+      orders,
+      overrides,
+    ] =
       await Promise.all([
         supabaseRows<ProjectRow>("push_projects", {
           select: "id,name,short_name",
@@ -104,7 +118,18 @@ export async function GET() {
             "scenario_mailing_id,goal_id,order_project_id,buyer_key,purchased_at,revenue,latency_minutes",
           order: "purchased_at.asc",
         }),
+        pgMetaQuery<PushManualOverrideRow>(PUSH_OVERRIDES_SELECT),
       ]);
+
+    const overrideByMailing = mapOverrides(overrides, "trigger");
+    const effectiveMailings = mailings
+      .map((mailing) =>
+        applyPushOverride(
+          mailing,
+          overrideByMailing.get(mailing.id) ?? undefined,
+        ),
+      )
+      .filter((mailing) => !mailing.isHidden);
 
     const maxMetricDate = dailyRows
       .map((row) => row.metric_date)
@@ -117,7 +142,10 @@ export async function GET() {
     const accumulators = new Map<string, MetricAccumulator>();
     const selectionAccumulators = new Map<string, MetricAccumulator>();
     const mailingProject = new Map(
-      mailings.map((mailing) => [mailing.id, mailing.project_id]),
+      effectiveMailings.map((mailing) => [
+        mailing.id,
+        mailing.project_id,
+      ]),
     );
     const add = (
       mailingId: number,
@@ -177,6 +205,7 @@ export async function GET() {
     };
 
     for (const order of orders) {
+      if (!mailingProject.has(order.scenario_mailing_id)) continue;
       const periods = ["all", moscowMonth(order.purchased_at)];
       if (new Date(order.purchased_at).getTime() >= sevenDayCutoff) {
         periods.push("7d");
@@ -250,7 +279,7 @@ export async function GET() {
             latency: metric.latency,
           };
         }),
-        messages: mailings.map((mailing) => ({
+        messages: effectiveMailings.map((mailing) => ({
           id: mailing.id,
           scenarioId: mailing.scenario_id,
           mindboxScenarioId:
@@ -264,6 +293,7 @@ export async function GET() {
           body: mailing.body,
           mailingType: mailing.mailing_type,
           applications: mailing.application_names,
+          manuallyEdited: Boolean(mailing.manualOverride),
           platforms: mailing.platforms,
           firstActivityAt: mailing.first_activity_at,
           lastActivityAt: mailing.last_activity_at,

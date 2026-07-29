@@ -10,6 +10,23 @@ function supabaseConfig() {
   return { url, anonKey };
 }
 
+function pgMetaConfig() {
+  const url = (
+    process.env.VITE_SUPABASE_URL ??
+    process.env.NEXT_PUBLIC_SUPABASE_URL ??
+    ""
+  ).replace(/\/$/, "");
+  const user = process.env.SUPABASE_STUDIO_USER ?? "";
+  const password = process.env.SUPABASE_STUDIO_PASSWORD ?? "";
+
+  if (!url || !user || !password) {
+    throw new Error(
+      "Supabase Studio не настроен: нужны VITE_SUPABASE_URL, SUPABASE_STUDIO_USER и SUPABASE_STUDIO_PASSWORD",
+    );
+  }
+  return { url, user, password };
+}
+
 export async function supabaseRows<T>(
   table: string,
   params: Record<string, string>,
@@ -59,4 +76,28 @@ export async function supabaseRpc<T>(
     );
   }
   return response.json() as Promise<T>;
+}
+
+export async function pgMetaQuery<T>(query: string): Promise<T[]> {
+  const { url, user, password } = pgMetaConfig();
+  const response = await fetch(
+    `${url}/api/platform/pg-meta/default/query`,
+    {
+      method: "POST",
+      cache: "no-store",
+      headers: {
+        Authorization: `Basic ${Buffer.from(`${user}:${password}`).toString("base64")}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query }),
+    },
+  );
+  if (!response.ok) {
+    const details = (await response.text()).slice(0, 500);
+    throw new Error(
+      `Supabase pg-meta: HTTP ${response.status}: ${details}`,
+    );
+  }
+  return response.json() as Promise<T[]>;
 }

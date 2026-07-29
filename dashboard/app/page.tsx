@@ -659,6 +659,9 @@ export default function Home() {
             <Link className="report-link secondary-link" href="/triggers">
               Триггерные пуши
             </Link>
+            <Link className="report-link secondary-link" href="/pushes">
+              Редактор пушей
+            </Link>
             <Link className="report-link" href="/blizko-july">
               Отчет Blizko · июль
               <svg aria-hidden="true" viewBox="0 0 24 24">

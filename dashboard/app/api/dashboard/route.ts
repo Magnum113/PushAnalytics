@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 
-import { supabaseRows } from "@/lib/supabase-server";
+import {
+  applyPushOverride,
+  mapOverrides,
+  PUSH_OVERRIDES_SELECT,
+  type PushManualOverrideRow,
+} from "@/lib/push-overrides";
+import { pgMetaQuery, supabaseRows } from "@/lib/supabase-server";
 
 type ProjectRow = {
   id: string;
@@ -52,7 +58,14 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const [projects, goals, campaigns, metrics, orderProjectMetrics] =
+    const [
+      projects,
+      goals,
+      campaigns,
+      metrics,
+      orderProjectMetrics,
+      overrides,
+    ] =
       await Promise.all([
       supabaseRows<ProjectRow>("push_projects", {
         select: "id,name,short_name",
@@ -80,7 +93,18 @@ export async function GET() {
             "campaign_id,goal_id,order_project_id,orders,buyers,revenue,latency_0_1h,latency_1_4h,latency_4_12h,latency_12_24h",
         },
       ),
+      pgMetaQuery<PushManualOverrideRow>(PUSH_OVERRIDES_SELECT),
     ]);
+
+    const overrideByCampaign = mapOverrides(overrides, "mass");
+    const effectiveCampaigns = campaigns
+      .map((campaign) =>
+        applyPushOverride(
+          campaign,
+          overrideByCampaign.get(campaign.id) ?? undefined,
+        ),
+      )
+      .filter((campaign) => !campaign.isHidden);
 
     const metricsByCampaign = new Map<
       number,
@@ -174,7 +198,7 @@ export async function GET() {
           name: goal.name,
           shortName: goal.short_name,
         })),
-        pushes: campaigns.map((campaign) => ({
+        pushes: effectiveCampaigns.map((campaign) => ({
           id: campaign.campaign_key,
           databaseId: campaign.id,
           projectId: campaign.project_id,
@@ -182,6 +206,7 @@ export async function GET() {
           title: campaign.title,
           body: campaign.body,
           applications: campaign.application_names,
+          manuallyEdited: Boolean(campaign.manualOverride),
           sentAt: campaign.sent_at,
           status: campaign.attribution_status,
           sent: Number(campaign.sent),

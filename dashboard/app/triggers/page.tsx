@@ -415,6 +415,9 @@ export default function TriggerPushesPage() {
             <Link className="report-link secondary-link" href="/">
               Массовые пуши
             </Link>
+            <Link className="report-link secondary-link" href="/pushes">
+              Редактор пушей
+            </Link>
             <div className="sync-status">
               <span>
                 Данные по {data.sourceCoverageEnd ?? "—"}

@@ -1,10 +1,21 @@
 import { NextResponse } from "next/server";
 
-import { supabaseRows, supabaseRpc } from "@/lib/supabase-server";
+import {
+  applyPushOverride,
+  mapOverrides,
+  PUSH_OVERRIDES_SELECT,
+  type PushManualOverrideRow,
+} from "@/lib/push-overrides";
+import {
+  pgMetaQuery,
+  supabaseRows,
+  supabaseRpc,
+} from "@/lib/supabase-server";
 
 type CampaignRow = {
   id: number;
   campaign_key: string;
+  project_id: string;
   name: string;
   title: string;
   body: string;
@@ -40,14 +51,28 @@ function isJulyMoscow(value: string) {
 
 export async function GET() {
   try {
-    const campaigns = (
-      await supabaseRows<CampaignRow>("push_campaigns", {
+    const [sourceCampaigns, overrides] = await Promise.all([
+      supabaseRows<CampaignRow>("push_campaigns", {
         select:
-          "id,campaign_key,name,title,body,application_names,sent_at,sent,delivered,clicked,not_delivered,generated_at",
-        project_id: "eq.blizko-app",
+          "id,campaign_key,project_id,name,title,body,application_names,sent_at,sent,delivered,clicked,not_delivered,generated_at",
         order: "sent_at.asc",
-      })
-    ).filter((campaign) => isJulyMoscow(campaign.sent_at));
+      }),
+      pgMetaQuery<PushManualOverrideRow>(PUSH_OVERRIDES_SELECT),
+    ]);
+    const overrideByCampaign = mapOverrides(overrides, "mass");
+    const campaigns = sourceCampaigns
+      .map((campaign) =>
+        applyPushOverride(
+          campaign,
+          overrideByCampaign.get(campaign.id) ?? undefined,
+        ),
+      )
+      .filter(
+        (campaign) =>
+          !campaign.isHidden &&
+          campaign.project_id === "blizko-app" &&
+          isJulyMoscow(campaign.sent_at),
+      );
 
     const campaignIds = campaigns.map((campaign) => campaign.id);
     const idFilter = `in.(${campaignIds.join(",")})`;
