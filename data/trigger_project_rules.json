@@ -1,0 +1,14 @@
+{
+  "folderRules": {
+    "4": "05-main",
+    "34aec65b-8416-473d-bbe9-7f1e35bb533e": "05-main",
+    "566cbb33-d8a9-4df7-b15f-99f45e21d0e0": "blizko-app"
+  },
+  "mailingOverrides": {
+    "6c09cf1a-9883-4023-ab54-e440b01288ec": "blizko-app",
+    "ae9c788e-bbb7-4d25-9fff-5b028f8f0d92": "blizko-app"
+  },
+  "excludedMailingIds": [
+    "e136932b-32a1-4f56-80cf-3635c2270f4a"
+  ]
+}

@@ -20,6 +20,7 @@
 - открывает по выбранному пушу обезличенный список покупок: дату, сумму, задержку после клика и состав заказа с названием товара, количеством и ценой;
 - адаптирует таблицу кампаний в полноценные аналитические карточки на мобильном экране;
 - открывает отдельный отчет `/blizko-july` по июльским пушам приложения Blizko: полная таблица, сравнение коммерческих текстов, выводы и ограничения;
+- открывает отдельную вкладку `/triggers` только для MobilePush-рассылок Mindbox с `type = trigger`: сценарии, дневные отправки и неотправки, клики, CTR, заказы, уникальные покупатели, выручка и состав покупок;
 - использует Supabase как источник сайта; локальный JSON остается промежуточным PII-free payload синхронизации.
 
 Запуск:
@@ -29,17 +30,63 @@ cd PushAnalytics
 .venv/bin/python scripts/build_dashboard_data.py --since 2026-05-01
 .venv/bin/python scripts/sync_supabase_pg_meta.py
 .venv/bin/python scripts/validate_supabase_data.py
+.venv/bin/python scripts/build_trigger_dashboard_data.py --since 2026-05-01
+.venv/bin/python scripts/sync_trigger_supabase_pg_meta.py
+.venv/bin/python scripts/validate_trigger_supabase_data.py
 cd dashboard
 npm run dev
 ```
 
 Локальный адрес: `http://localhost:3000/`. Июльский отчет Blizko:
-`http://localhost:3000/blizko-july`.
+`http://localhost:3000/blizko-july`. Триггерные пуши:
+`http://localhost:3000/triggers`.
 
 Воспроизводимая проверка расчетов отчета находится в
 `PushAnalytics/analysis/blizko_july_report.ipynb`.
 
-Сырые Parquet-файлы кэшируются в `PushAnalytics/data/raw/`, а PII-free payload синхронизации создается в `PushAnalytics/dashboard/public/data/dashboard.json`. Оба пути исключены из Git. Браузер этот JSON не читает: `/api/dashboard` и `/api/purchases` получают данные из Supabase.
+Сырые Parquet-файлы кэшируются в `PushAnalytics/data/raw/`. PII-free payload массовых рассылок создается в `PushAnalytics/dashboard/public/data/dashboard.json`, а trigger-слой — в `PushAnalytics/data/generated/trigger_dashboard.json`. Эти пути исключены из Git. Браузер JSON не читает: API сайта получает данные из Supabase.
+
+## Триггерные пуши
+
+Вкладка `/triggers` отделена от массовых рассылок и принимает только строки
+`Mailings.Mailings`, где `channel = MobilePush` и `type = trigger`. Рассылки
+`transaction` в таблицу и KPI не попадают.
+
+При этом атрибуция остается общей: перед заказом выбирается последний клик
+среди всех MobilePush (`mass`, `trigger`, `transaction`) за 24 часа. Поэтому
+transaction-пуш может забрать заказ у trigger-пуша, но сам не будет показан во
+вкладке trigger. Это не дает одному заказу одновременно попасть в массовый и
+trigger-отчеты.
+
+На 2026-07-29 в Supabase загружен подтвержденный локальным Delta-кэшем период
+с 1 мая по 23 июля 2026 года:
+
+- 7 активных сценариев и 8 логических trigger-сообщений;
+- 555 дневных срезов отправок;
+- 133 заказа и 97 уникальных покупателей по общей цели `Заказы`;
+- 207 записей атрибуции по всем переключаемым целям;
+- 542 товарные строки в детализации покупок.
+
+Android- и iOS-варианты одного сообщения объединяются по сценарию и
+нормализованному названию. Правила проекта хранятся в
+`PushAnalytics/data/trigger_project_rules.json`, а ручные уточнения текста и
+приложения — в `PushAnalytics/data/trigger_content.json`. Если тело push не
+заполнено вручную, интерфейс честно показывает, что сообщение определено по
+названию рассылки Mindbox.
+
+Расчет выполняется полной идемпотентной пересборкой:
+
+```bash
+cd PushAnalytics
+.venv/bin/python scripts/build_trigger_dashboard_data.py --since 2026-05-01
+.venv/bin/python scripts/sync_trigger_supabase_pg_meta.py
+.venv/bin/python scripts/validate_trigger_supabase_data.py
+```
+
+Скрипт сборки потоково читает локальный Delta-кэш, нормализует объединенные
+профили клиентов, определяет глобального last-click победителя и сохраняет
+только HMAC/SHA-256 ключи. Синхронизация обновляет Supabase порциями и удаляет
+устаревшие строки только по маркеру завершенного снимка.
 
 Параметр `--since` задает начало периода включительно. Необязательный `--campaigns` ограничивает количество последних кампаний на каждый проект.
 
@@ -77,7 +124,9 @@ npm run dev
 - `PushAnalytics/supabase/migrations/20260723_add_push_campaign_applications.sql`;
 - `PushAnalytics/supabase/migrations/20260723_classify_july_push_applications.sql`;
 - `PushAnalytics/supabase/migrations/20260724_add_unique_buyers.sql`;
-- `PushAnalytics/supabase/migrations/20260724_add_order_project_dimension.sql`.
+- `PushAnalytics/supabase/migrations/20260724_add_order_project_dimension.sql`;
+- `PushAnalytics/supabase/migrations/20260729104848_trigger_push_analytics.sql`;
+- `PushAnalytics/supabase/migrations/20260729110612_trigger_order_items_sync_marker.sql`.
 
 Миграции применены к self-hosted Supabase `https://supabasekm.05.ru`. После синхронизации 2026-07-24 в базе находятся 3 проекта, 4 цели, 39 кампаний, 156 наборов метрик «пуш × цель», 832 записи атрибуции по переключаемым целям, 3 993 товарные строки и 1 103 сопоставленных товара каталога. По общей цели `Заказы` атрибуцировано 684 заказа.
 
@@ -93,7 +142,15 @@ npm run dev
 - `push_campaign_goal_order_project_metrics` — представление метрик по тройке «пуш × цель × проект заказа»;
 - `push_attributed_order_items` — товарные строки покупки, количество и цены;
 - `push_products` — справочник названий, артикулов и внешних идентификаторов товаров из отдельного экспорта каталога Mindbox;
-- `push_sync_runs` — журнал синхронизаций.
+- `push_sync_runs` — журнал синхронизаций;
+- `push_scenarios` — сценарии Mindbox, которые запускают trigger-пуши;
+- `push_scenario_mailings` — логические trigger-сообщения и связь с проектом;
+- `push_scenario_daily_metrics` — дневные когорты отправок, неотправок, кликов и расчетной доставки;
+- `push_click_touchpoints` — закрытый общий слой кликов для выбора одного last-click победителя;
+- `push_trigger_attributed_orders` — обезличенные заказы, выигранные trigger-пушем;
+- `push_trigger_attributed_order_items` — товарные строки этих заказов;
+- `push_trigger_goal_metrics` и `push_trigger_goal_order_project_metrics` — представления результатов по цели и фактическому проекту заказа;
+- `push_delta_cursors` — подготовленная таблица версий для перехода к инкрементальной синхронизации.
 
 На клиентское чтение открыты справочники, кампании, агрегаты целей и обезличенные детали покупок. RLS включен; `anon` и `authenticated` не получают прав на запись. Идентификаторы клиентов Mindbox не сохраняются, а исходный номер заказа заменяется SHA-256-хэшем.
 

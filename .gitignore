@@ -9,6 +9,7 @@ dist/
 tmp/
 data/raw/
 data/catalog/
+data/generated/
 dashboard/public/data/dashboard.json
 dashboard/public/data/supabase-config.json
 dashboard/output/
