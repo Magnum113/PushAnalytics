@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
+import { ProjectMultiSelect } from "../project-multiselect";
+
 type Project = { id: string; name: string; shortName: string };
 type Goal = Project;
 type DailyMetric = {
@@ -50,11 +52,6 @@ type TriggerData = {
   attribution: { windowHours: number; model: string };
   projects: Project[];
   goals: Goal[];
-  selectionOrderMetrics: Array<
-    OrderMetric & {
-      pushProjectId: string;
-    }
-  >;
   messages: TriggerMessage[];
 };
 type PurchaseItem = {
@@ -102,7 +99,6 @@ const emptyData: TriggerData = {
   attribution: { windowHours: 24, model: "Последний клик" },
   projects: [],
   goals: [],
-  selectionOrderMetrics: [],
   messages: [],
 };
 
@@ -160,14 +156,13 @@ function orderTotals(
   message: TriggerMessage,
   period: string,
   goalId: string,
-  orderProjectId: string,
 ) {
   return (
     message.orderMetrics.find(
       (metric) =>
         metric.period === period &&
         metric.goalId === goalId &&
-        metric.orderProjectId === orderProjectId,
+        metric.orderProjectId === message.projectId,
     ) ?? {
       orders: 0,
       buyers: 0,
@@ -181,9 +176,8 @@ export default function TriggerPushesPage() {
   const [data, setData] = useState<TriggerData>(emptyData);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
-  const [projectId, setProjectId] = useState("all");
+  const [selectedProjectIds, setSelectedProjectIds] = useState<string[]>([]);
   const [goalId, setGoalId] = useState("all-orders");
-  const [orderProjectId, setOrderProjectId] = useState("all");
   const [period, setPeriod] = useState("all");
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -192,6 +186,11 @@ export default function TriggerPushesPage() {
   const [purchasesError, setPurchasesError] = useState("");
   const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [purchaseBuyers, setPurchaseBuyers] = useState(0);
+  const [totalBuyerResult, setTotalBuyerResult] = useState<{
+    key: string;
+    buyers: number | null;
+    error: boolean;
+  } | null>(null);
 
   useEffect(() => {
     fetch("/api/triggers", { cache: "no-store" })
@@ -201,6 +200,9 @@ export default function TriggerPushesPage() {
       })
       .then((payload: TriggerData) => {
         setData(payload);
+        setSelectedProjectIds(
+          payload.projects.map((project) => project.id),
+        );
         setSelectedId(payload.messages[0]?.id ?? null);
       })
       .catch(() => setLoadError("Не удалось загрузить trigger-пуши из Supabase."))
@@ -228,16 +230,21 @@ export default function TriggerPushesPage() {
     [data.messages],
   );
 
+  const selectedProjectSet = useMemo(
+    () => new Set(selectedProjectIds),
+    [selectedProjectIds],
+  );
+
   const projectMessages = useMemo(
     () =>
       data.messages.filter((message) => {
         const daily = dailyTotals(message, period, data.sourceCoverageEnd);
         return (
           daily.participants > 0 &&
-          (projectId === "all" || message.projectId === projectId)
+          selectedProjectSet.has(message.projectId)
         );
       }),
-    [data.messages, data.sourceCoverageEnd, period, projectId],
+    [data.messages, data.sourceCoverageEnd, period, selectedProjectSet],
   );
 
   const visible = useMemo(() => {
@@ -252,41 +259,38 @@ export default function TriggerPushesPage() {
       )
       .sort((a, b) => {
         const orderDifference =
-          orderTotals(b, period, goalId, orderProjectId).orders -
-          orderTotals(a, period, goalId, orderProjectId).orders;
+          orderTotals(b, period, goalId).orders -
+          orderTotals(a, period, goalId).orders;
         if (orderDifference) return orderDifference;
         return (
           new Date(b.lastActivityAt ?? 0).getTime() -
           new Date(a.lastActivityAt ?? 0).getTime()
         );
       });
-  }, [goalId, orderProjectId, period, projectMessages, query]);
+  }, [goalId, period, projectMessages, query]);
 
-  const selectedProject = data.projects.find(
-    (project) => project.id === projectId,
-  );
+  const allProjectsSelected =
+    selectedProjectIds.length === data.projects.length;
   const projectScopeName =
-    projectId === "all"
+    allProjectsSelected
       ? "Все проекты"
-      : (selectedProject?.name ?? "Выбранный проект");
+      : selectedProjectIds.length === 1
+        ? (data.projects.find(
+            (project) => project.id === selectedProjectIds[0],
+          )?.name ?? "Выбранный проект")
+        : `${selectedProjectIds.length} проекта`;
 
   const totals = useMemo(
     () =>
       visible.reduce(
         (total, message) => {
           const daily = dailyTotals(message, period, data.sourceCoverageEnd);
-          const orders = orderTotals(
-            message,
-            period,
-            goalId,
-            orderProjectId,
-          );
+          const orders = orderTotals(message, period, goalId);
           total.sent += daily.sent;
           total.delivered += daily.delivered;
           total.clicked += daily.clicked;
           total.notSent += daily.notSent;
           total.orders += orders.orders;
-          total.buyers += orders.buyers;
           total.revenue += orders.revenue;
           return total;
         },
@@ -296,47 +300,81 @@ export default function TriggerPushesPage() {
           clicked: 0,
           notSent: 0,
           orders: 0,
-          buyers: 0,
           revenue: 0,
         },
       ),
-    [
-      data.sourceCoverageEnd,
-      goalId,
-      orderProjectId,
-      period,
-      visible,
-    ],
+    [data.sourceCoverageEnd, goalId, period, visible],
   );
+
+  const buyerRequestKey =
+    `${period}:${goalId}:${visible.map((message) => message.id).join(",")}:` +
+    visible.map((message) => message.projectId).join(",");
+
+  useEffect(() => {
+    if (!visible.length) return;
+    const controller = new AbortController();
+    const params = new URLSearchParams({
+      period,
+      goalId,
+      scenarioMailingIds: visible
+        .map((message) => message.id)
+        .join(","),
+      projectIds: visible
+        .map((message) => message.projectId)
+        .join(","),
+    });
+    fetch(`/api/trigger-buyers?${params}`, {
+      cache: "no-store",
+      signal: controller.signal,
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Buyer count is unavailable");
+        return response.json();
+      })
+      .then((payload: { buyers: number }) => {
+        setTotalBuyerResult({
+          key: buyerRequestKey,
+          buyers: Number(payload.buyers),
+          error: false,
+        });
+      })
+      .catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+        setTotalBuyerResult({
+          key: buyerRequestKey,
+          buyers: null,
+          error: true,
+        });
+      });
+    return () => controller.abort();
+  }, [buyerRequestKey, goalId, period, visible]);
 
   const selected =
     visible.find((message) => message.id === selectedId) ??
     visible[0] ??
     data.messages[0];
-  const exactSelectionMetric = !query.trim()
-    ? (data.selectionOrderMetrics ?? []).find(
-        (metric) =>
-          metric.period === period &&
-          metric.goalId === goalId &&
-          metric.orderProjectId === orderProjectId &&
-          metric.pushProjectId === projectId,
-      )
-    : undefined;
-  const resolvedOrders = exactSelectionMetric?.orders ?? totals.orders;
-  const resolvedBuyers = exactSelectionMetric?.buyers ?? totals.buyers;
-  const resolvedRevenue = exactSelectionMetric?.revenue ?? totals.revenue;
+  const resolvedOrders = totals.orders;
+  const resolvedBuyerResult =
+    visible.length === 0
+      ? { buyers: 0, error: false }
+      : totalBuyerResult?.key === buyerRequestKey
+        ? totalBuyerResult
+        : { buyers: null, error: false };
+  const resolvedBuyers = resolvedBuyerResult.buyers;
+  const resolvedBuyerError = resolvedBuyerResult.error;
+  const resolvedRevenue = totals.revenue;
   const bestByOrder = projectMessages
     .filter(
       (message) =>
-        orderTotals(message, period, goalId, orderProjectId).orders > 0,
+        orderTotals(message, period, goalId).orders > 0,
     )
     .sort((a, b) => {
       const aDaily = dailyTotals(a, period, data.sourceCoverageEnd);
       const bDaily = dailyTotals(b, period, data.sourceCoverageEnd);
       return (
-        orderTotals(b, period, goalId, orderProjectId).orders /
+        orderTotals(b, period, goalId).orders /
           Math.max(bDaily.clicked, 1) -
-        orderTotals(a, period, goalId, orderProjectId).orders /
+        orderTotals(a, period, goalId).orders /
           Math.max(aDaily.clicked, 1)
       );
     })[0];
@@ -359,7 +397,6 @@ export default function TriggerPushesPage() {
       const params = new URLSearchParams({
         scenarioMailingId: String(message.id),
         goalId,
-        orderProjectId,
         period,
       });
       const response = await fetch(`/api/trigger-purchases?${params}`, {
@@ -428,20 +465,16 @@ export default function TriggerPushesPage() {
         </header>
 
         <section className="command-bar" aria-label="Фильтры trigger-пушей">
-          <label className="command-control project-filter">
-            <span>Проект пуша</span>
-            <select
-              value={projectId}
-              onChange={(event) => setProjectId(event.target.value)}
-            >
-              <option value="all">Все проекты</option>
-              {data.projects.map((project) => (
-                <option key={project.id} value={project.id}>
-                  {project.name}
-                </option>
-              ))}
-            </select>
-          </label>
+          <ProjectMultiSelect
+            projects={data.projects.map((project) => ({
+              ...project,
+              count: data.messages.filter(
+                (message) => message.projectId === project.id,
+              ).length,
+            }))}
+            selectedIds={selectedProjectIds}
+            onChange={setSelectedProjectIds}
+          />
           <label className="command-control goal-filter">
             <span>Целевое действие</span>
             <select
@@ -451,20 +484,6 @@ export default function TriggerPushesPage() {
               {data.goals.map((goal) => (
                 <option key={goal.id} value={goal.id}>
                   {goal.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="command-control order-project-filter">
-            <span>Где сделана покупка</span>
-            <select
-              value={orderProjectId}
-              onChange={(event) => setOrderProjectId(event.target.value)}
-            >
-              <option value="all">Все проекты заказов</option>
-              {data.projects.map((project) => (
-                <option key={project.id} value={project.id}>
-                  {project.name}
                 </option>
               ))}
             </select>
@@ -521,8 +540,16 @@ export default function TriggerPushesPage() {
           </article>
           <article>
             <span>Покупатели</span>
-            <strong>{number.format(resolvedBuyers)}</strong>
-            <small>уникальные в выборке</small>
+            <strong>
+              {resolvedBuyers === null ? "—" : number.format(resolvedBuyers)}
+            </strong>
+            <small>
+              {resolvedBuyerError
+                ? "не удалось загрузить"
+                : resolvedBuyers === null
+                  ? "считаем…"
+                  : "уникальные в выборке"}
+            </small>
           </article>
           <article>
             <span>Выручка</span>
@@ -539,12 +566,12 @@ export default function TriggerPushesPage() {
           <div>
             <span className="signal-label">
               {bestByOrder
-                ? projectId === "all"
+                ? allProjectsSelected
                   ? "Лучший пуш среди всех проектов"
-                  : "Лучший пуш в выбранном проекте"
-                : projectId === "all"
+                  : "Лучший пуш в выбранных проектах"
+                : allProjectsSelected
                   ? "Сигнал по всем проектам"
-                  : "Сигнал по выбранному проекту"}
+                  : "Сигнал по выбранным проектам"}
             </span>
             <h2>
               {(bestByOrder ?? bestByCtr)?.title ||
@@ -553,8 +580,8 @@ export default function TriggerPushesPage() {
             </h2>
             <p>
               {bestByOrder
-                ? `${number.format(orderTotals(bestByOrder, period, goalId, orderProjectId).orders)} заказов · ${percent(
-                    orderTotals(bestByOrder, period, goalId, orderProjectId)
+                ? `${number.format(orderTotals(bestByOrder, period, goalId).orders)} заказов · ${percent(
+                    orderTotals(bestByOrder, period, goalId)
                       .orders,
                     dailyTotals(
                       bestByOrder,
@@ -575,10 +602,11 @@ export default function TriggerPushesPage() {
           <div className="trigger-signal-note">
             <strong>{projectScopeName}</strong>
             <span>
-              {projectId === "all"
+              {allProjectsSelected
                 ? "Сейчас сравниваются trigger-пуши всех проектов."
-                : "В рейтинге участвуют только trigger-пуши этого проекта."}{" "}
-              Заказ получает последний MobilePush-клик за 24 часа.
+                : "В рейтинге участвуют trigger-пуши выбранных проектов."}{" "}
+              Покупка учитывается только внутри проекта пуша; победитель
+              по-прежнему определяется последним MobilePush-кликом за 24 часа.
             </span>
           </div>
         </section>
@@ -613,12 +641,7 @@ export default function TriggerPushesPage() {
                     period,
                     data.sourceCoverageEnd,
                   );
-                  const orders = orderTotals(
-                    message,
-                    period,
-                    goalId,
-                    orderProjectId,
-                  );
+                  const orders = orderTotals(message, period, goalId);
                   return (
                     <tr
                       key={message.id}
@@ -696,13 +719,12 @@ export default function TriggerPushesPage() {
               <span>Покупки по выбранным фильтрам</span>
               <strong>
                 {number.format(
-                  orderTotals(selected, period, goalId, orderProjectId).orders,
+                  orderTotals(selected, period, goalId).orders,
                 )}
               </strong>
               <button
                 disabled={
-                  orderTotals(selected, period, goalId, orderProjectId).orders ===
-                  0
+                  orderTotals(selected, period, goalId).orders === 0
                 }
                 onClick={() => openPurchases(selected)}
               >

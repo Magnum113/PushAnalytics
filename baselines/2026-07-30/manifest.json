@@ -1,0 +1,143 @@
+{
+  "artifactHashes": {
+    "configuration.json": "18054f9603a3be6f8c818e5da3ecf5c2971e44cafd3534288921623061190198",
+    "golden_diagnostics.json": "5c2ceb0ea4d6f8f454fcde99f705557ed906f14c6dfc9558ef119cc8ebc18f7e",
+    "golden_traces.json": "f2ca9820ef4ffdc9f2620101f7840baa87af5846afde8021a78dd10d634a3492",
+    "supabase_snapshot.json": "1fff8cdd929d70aea6553284bfbe32fd9055c89e47b0e89a2c13027514aac159"
+  },
+  "attribution": {
+    "channel": "MobilePush",
+    "mailingTypes": [
+      "mass",
+      "trigger",
+      "transaction"
+    ],
+    "model": "last_click",
+    "windowHours": 24
+  },
+  "capturedAt": "2026-07-30T07:18:23.098353+00:00",
+  "configHash": "fa9e507866382223c9e173c9484b7e8e9f5241a660bac754a230eef06b01fc18",
+  "environmentPresence": {
+    "NEXT_PUBLIC_SUPABASE_URL": true,
+    "PUSH_ANALYTICS_ADMIN_KEY": true,
+    "SECRET_KEY": true,
+    "SHIFR_KEY": true,
+    "SUPABASE_SERVICE_ROLE_KEY": false,
+    "SUPABASE_STUDIO_PASSWORD": true,
+    "SUPABASE_STUDIO_USER": true,
+    "URL_DATABASE": true
+  },
+  "git": {
+    "branch": "main",
+    "head": "91a7863efcb828d23f9de279293a2947614ff364",
+    "isDirty": true,
+    "originMain": "91a7863efcb828d23f9de279293a2947614ff364",
+    "sourceFiles": [
+      {
+        "path": "scripts/build_dashboard_data.py",
+        "sha256": "2f188bb276d73146fe4b9f094a5e4b91a4ccee0286d86cf74ce8dc8ca1c9135f"
+      },
+      {
+        "path": "scripts/build_trigger_dashboard_data.py",
+        "sha256": "c427d44c7a3ea5d5f1867b8ba397592c6d19a0ff63e8e8cc01ceb377a281107a"
+      },
+      {
+        "path": "scripts/sync_supabase.py",
+        "sha256": "f50f36d112361ac76633245e1f85bd0dd9960bedfeb50b52f027291b64c63bb3"
+      },
+      {
+        "path": "scripts/sync_supabase_pg_meta.py",
+        "sha256": "dbd99fcce799738f68ecee5feda4c59f40c74d8a1fb0f245481c347444d5b6c7"
+      },
+      {
+        "path": "scripts/sync_trigger_supabase_pg_meta.py",
+        "sha256": "dfbe92f67a65fbe0bdb3c84d409c871d896b8e8dff736ff2dbef78be9b8d5d1c"
+      },
+      {
+        "path": "scripts/validate_supabase_data.py",
+        "sha256": "11c436d335f9bd55213e1b70828569456d4c45796058d316ec4d3287389242a3"
+      },
+      {
+        "path": "scripts/validate_trigger_supabase_data.py",
+        "sha256": "061fa64a70a826cfd93ace9d5f88f78669962989fac22842bdb40a5d19e0c676"
+      }
+    ],
+    "workingTreeStatus": [
+      "M README.md",
+      "?? .ai/",
+      "?? baselines/",
+      "?? docs/",
+      "?? reports/",
+      "?? scripts/analyze_blizko_cart_to_purchase.py",
+      "?? scripts/capture_stage0_baseline.py",
+      "?? scripts/validate_stage0_baseline.py"
+    ]
+  },
+  "mindboxDelta": {
+    "CDP.Folders": {
+      "latestDataAt": "2026-07-29T18:35:11.067000+00:00",
+      "latestVersion": 665,
+      "latestWindowAdds": 1,
+      "localCacheFiles": 25,
+      "localCacheMaxVersion": 665
+    },
+    "CDP.MergedCustomers": {
+      "latestDataAt": "2026-07-29T22:27:30.590000+00:00",
+      "latestVersion": 694,
+      "latestWindowAdds": 10,
+      "localCacheFiles": 706,
+      "localCacheMaxVersion": 693
+    },
+    "Mailings.CustomerMessagesStatuses": {
+      "latestDataAt": "2026-07-29T22:03:49.616000+00:00",
+      "latestVersion": 2164,
+      "latestWindowAdds": 6,
+      "localCacheFiles": 205,
+      "localCacheMaxVersion": 2154
+    },
+    "Mailings.Mailings": {
+      "latestDataAt": "2026-07-28T11:28:22.726000+00:00",
+      "latestVersion": 667,
+      "latestWindowAdds": 9,
+      "localCacheFiles": 613,
+      "localCacheMaxVersion": 666
+    },
+    "PDP.ProductExternalIds": {
+      "latestDataAt": "2026-07-29T22:44:29.743000+00:00",
+      "latestVersion": 69,
+      "latestWindowAdds": 9,
+      "localCacheFiles": 74,
+      "localCacheMaxVersion": 63
+    },
+    "ProcessingOrders.Orders": {
+      "latestDataAt": "2026-07-29T22:30:39.973000+00:00",
+      "latestVersion": 1495,
+      "latestWindowAdds": 5,
+      "localCacheFiles": 985,
+      "localCacheMaxVersion": 1493
+    },
+    "ProcessingOrders.PointsOfContact": {
+      "latestDataAt": "2026-07-29T22:37:51.023000+00:00",
+      "latestVersion": 731,
+      "latestWindowAdds": 10,
+      "localCacheFiles": 744,
+      "localCacheMaxVersion": 730
+    },
+    "ProcessingOrders.PurchaseStatuses": {
+      "latestDataAt": "2025-05-29T10:10:41.110000+00:00",
+      "latestVersion": 685,
+      "latestWindowAdds": 2,
+      "localCacheFiles": 3,
+      "localCacheMaxVersion": 255
+    },
+    "ProcessingOrders.Purchases": {
+      "latestDataAt": "2026-07-29T22:30:39.973000+00:00",
+      "latestVersion": 1508,
+      "latestWindowAdds": 5,
+      "localCacheFiles": 909,
+      "localCacheMaxVersion": 1506
+    }
+  },
+  "periodSince": "2026-05-01T00:00:00+00:00",
+  "timezone": "Europe/Moscow"
+}

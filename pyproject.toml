@@ -1,0 +1,16 @@
+[tool.pytest.ini_options]
+addopts = "-ra --strict-markers"
+pythonpath = ["scripts"]
+testpaths = ["tests"]
+markers = [
+  "live_sql: read-only reconciliation against the configured Supabase instance",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["push_analytics_core"]
+
+[tool.coverage.report]
+fail_under = 100
+show_missing = true
+skip_covered = false

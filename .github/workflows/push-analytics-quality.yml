@@ -1,0 +1,125 @@
+name: Push Analytics quality gates
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/push-analytics-quality.yml"
+      - "data/**"
+      - "scripts/**"
+      - "supabase/**"
+      - "tests/**"
+      - "dashboard/**"
+      - "baselines/**"
+      - "pyproject.toml"
+      - "requirements*.txt"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/push-analytics-quality.yml"
+      - "data/**"
+      - "scripts/**"
+      - "supabase/**"
+      - "tests/**"
+      - "dashboard/**"
+      - "baselines/**"
+      - "pyproject.toml"
+      - "requirements*.txt"
+
+permissions:
+  contents: read
+
+jobs:
+  offline-quality:
+    name: Unit, golden and frontend
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install Python dependencies
+        run: python -m pip install --requirement requirements-dev.txt
+
+      - name: Unit tests and 100% core branch coverage
+        run: >-
+          pytest tests/unit
+          --cov=push_analytics_core
+          --cov-branch
+          --cov-report=term-missing
+          --cov-fail-under=100
+
+      - name: Integration tests
+        run: pytest tests/integration
+
+      - name: Golden regression and secret scan
+        run: pytest tests/regression
+
+      - name: Validate frozen Stage 0 baseline
+        run: python scripts/validate_stage0_baseline.py
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: dashboard/package-lock.json
+
+      - name: Install dashboard dependencies
+        working-directory: dashboard
+        run: npm ci
+
+      - name: Lint dashboard
+        working-directory: dashboard
+        run: npm run lint
+
+      - name: Build dashboard
+        working-directory: dashboard
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://example.invalid
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-placeholder
+          PUSH_ANALYTICS_ADMIN_KEY: ci-placeholder
+        run: npm run build
+
+  live-supabase:
+    name: Live Supabase reconciliation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.fork == false
+    env:
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      SUPABASE_STUDIO_USER: ${{ secrets.SUPABASE_STUDIO_USER }}
+      SUPABASE_STUDIO_PASSWORD: ${{ secrets.SUPABASE_STUDIO_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Require reconciliation credentials
+        run: |
+          test -n "${VITE_SUPABASE_URL}"
+          test -n "${SUPABASE_STUDIO_USER}"
+          test -n "${SUPABASE_STUDIO_PASSWORD}"
+
+      - name: Install Python dependencies
+        run: python -m pip install --requirement requirements-dev.txt
+
+      - name: Read-only SQL reconciliation
+        run: pytest tests/sql
+
+      - name: Existing mass validator
+        run: python scripts/validate_supabase_data.py
+
+      - name: Existing trigger validator
+        run: python scripts/validate_trigger_supabase_data.py

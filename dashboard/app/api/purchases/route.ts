@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { supabaseRows } from "@/lib/supabase-server";
+import { pgMetaQuery, supabaseRows } from "@/lib/supabase-server";
 
 type OrderRow = {
   id: number;
@@ -51,26 +51,34 @@ export const dynamic = "force-dynamic";
 export async function GET(request: NextRequest) {
   const campaignId = Number(request.nextUrl.searchParams.get("campaignId"));
   const goalId = request.nextUrl.searchParams.get("goalId") ?? "";
-  const orderProjectId =
-    request.nextUrl.searchParams.get("orderProjectId") ?? "all";
   if (
     !Number.isSafeInteger(campaignId) ||
     campaignId <= 0 ||
-    !/^[a-z0-9-]+$/.test(goalId) ||
-    !/^(all|[a-z0-9-]+)$/.test(orderProjectId)
+    !/^[a-z0-9-]+$/.test(goalId)
   ) {
     return NextResponse.json({ error: "Некорректный запрос" }, { status: 400 });
   }
 
   try {
+    const [campaign] = await pgMetaQuery<{ project_id: string }>(`
+      select
+        coalesce(manual.project_id, campaign.project_id) as project_id
+      from public.push_campaigns as campaign
+      left join public.push_manual_overrides as manual
+        on manual.source_kind = 'mass'
+       and manual.campaign_id = campaign.id
+      where campaign.id = ${campaignId}
+      limit 1
+    `);
+    if (!campaign) {
+      return NextResponse.json({ error: "Пуш не найден" }, { status: 404 });
+    }
     const orders = await supabaseRows<OrderRow>("push_attributed_orders", {
       select:
         "id,order_key,buyer_key,purchased_at,attributed_click_at,latency_minutes,revenue,order_project_id",
       campaign_id: `eq.${campaignId}`,
       goal_id: `eq.${goalId}`,
-      ...(orderProjectId === "all"
-        ? {}
-        : { order_project_id: `eq.${orderProjectId}` }),
+      order_project_id: `eq.${campaign.project_id}`,
       order: "purchased_at.desc",
     });
     const orderIds = orders.map((order) => order.id);

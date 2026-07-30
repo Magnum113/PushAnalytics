@@ -30,22 +30,53 @@ import certifi
 ROOT = Path(__file__).resolve().parents[1]
 RAW_DIR = ROOT / "data" / "raw"
 SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
+SUPPORTED_ENV_KEYS = {
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    "NEXT_PUBLIC_SUPABASE_URL",
+    "PUSH_ANALYTICS_ADMIN_KEY",
+    "SECRET_KEY",
+    "SHIFR_KEY",
+    "SUPABASE_DB_HOST",
+    "SUPABASE_DB_PASSWORD",
+    "SUPABASE_KEY",
+    "SUPABASE_PROJECT_REF",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_STUDIO_PASSWORD",
+    "SUPABASE_STUDIO_USER",
+    "SUPABASE_URL",
+    "URL_DATABASE",
+    "VITE_SUPABASE_PUBLISHABLE_KEY",
+    "VITE_SUPABASE_URL",
+}
 
 
 def load_env(path: Path = ROOT / ".env") -> dict[str, str]:
     values: dict[str, str] = {}
-    if not path.exists():
-        raise RuntimeError(f"Не найден файл {path}")
+    if path.exists():
+        for raw_line in path.read_text(encoding="utf-8").splitlines():
+            line = raw_line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            value = value.strip()
+            if (
+                len(value) >= 2
+                and value[0] == value[-1]
+                and value[0] in {"'", '"'}
+            ):
+                value = value[1:-1]
+            values[key.strip()] = value
 
-    for raw_line in path.read_text(encoding="utf-8").splitlines():
-        line = raw_line.strip()
-        if not line or line.startswith("#") or "=" not in line:
-            continue
-        key, value = line.split("=", 1)
-        value = value.strip()
-        if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
-            value = value[1:-1]
-        values[key.strip()] = value
+    # CI and container deployments inject credentials as process environment
+    # variables. Explicit environment values take precedence over local .env.
+    allowed_keys = SUPPORTED_ENV_KEYS | set(values)
+    values.update(
+        {
+            key: os.environ[key]
+            for key in allowed_keys
+            if os.environ.get(key)
+        }
+    )
     return values
 
 

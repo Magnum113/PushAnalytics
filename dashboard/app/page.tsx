@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 
+import { ProjectMultiSelect } from "./project-multiselect";
+
 type GoalMetrics = {
   orders: number;
   buyers: number;
@@ -38,8 +40,6 @@ type DashboardData = {
   source: "supabase" | "mindbox" | "demo";
   sourceNote: string;
   defaultGoalId?: string;
-  defaultProjectId?: string;
-  defaultOrderProjectId?: string;
   attribution: {
     windowHours: number;
     model: string;
@@ -62,8 +62,6 @@ const fallbackData: DashboardData = {
   source: "demo",
   sourceNote: "Демонстрационные данные — ожидается локальная синхронизация Mindbox",
   defaultGoalId: "blizko-app",
-  defaultProjectId: "all",
-  defaultOrderProjectId: "all",
   attribution: { windowHours: 24, model: "Последний клик" },
   projects: [
     {
@@ -241,8 +239,6 @@ const emptyData: DashboardData = {
   source: "supabase",
   sourceNote: "",
   defaultGoalId: "all-orders",
-  defaultProjectId: "all",
-  defaultOrderProjectId: "all",
   attribution: { windowHours: 24, model: "Последний клик" },
   projects: [],
   goals: [],
@@ -331,21 +327,16 @@ const emptyGoalMetrics: GoalMetrics = {
 function metricsFor(
   push: Push,
   goalId: string,
-  orderProjectId: string,
 ): GoalMetrics {
-  if (orderProjectId === "all") {
-    return push.goals[goalId] ?? emptyGoalMetrics;
-  }
   return (
-    push.orderProjectGoals?.[orderProjectId]?.[goalId] ?? emptyGoalMetrics
+    push.orderProjectGoals?.[push.projectId]?.[goalId] ?? emptyGoalMetrics
   );
 }
 
 export default function Home() {
   const [data, setData] = useState<DashboardData>(emptyData);
   const [goalId, setGoalId] = useState("all-orders");
-  const [projectId, setProjectId] = useState("all");
-  const [orderProjectId, setOrderProjectId] = useState("all");
+  const [selectedProjectIds, setSelectedProjectIds] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState("");
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<"date" | "ctr" | "orders">("date");
@@ -360,7 +351,8 @@ export default function Home() {
   const [attributedBuyers, setAttributedBuyers] = useState(0);
   const [totalBuyerResult, setTotalBuyerResult] = useState<{
     key: string;
-    buyers: number;
+    buyers: number | null;
+    error: boolean;
   } | null>(null);
   const unresolvedProductLines = attributedOrders.reduce(
     (total, order) =>
@@ -381,8 +373,7 @@ export default function Home() {
             next.goals[0]?.id ??
             "all-orders",
         );
-        setProjectId(next.defaultProjectId ?? "all");
-        setOrderProjectId(next.defaultOrderProjectId ?? "all");
+        setSelectedProjectIds(next.projects.map((project) => project.id));
         setSelectedId(next.pushes[0]?.id ?? "");
       })
       .catch(() => setLoadError("Не удалось загрузить данные из Supabase."))
@@ -398,6 +389,11 @@ export default function Home() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [purchasesOpen]);
 
+  const selectedProjectSet = useMemo(
+    () => new Set(selectedProjectIds),
+    [selectedProjectIds],
+  );
+
   const visiblePushes = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase("ru");
     const latestSentAt = Math.max(
@@ -410,7 +406,7 @@ export default function Home() {
           (period === "7d"
             ? new Date(push.sentAt).getTime() >= cutoff
             : monthKey(push.sentAt) === period)) &&
-        (projectId === "all" || push.projectId === projectId) &&
+        selectedProjectSet.has(push.projectId) &&
         (!normalized ||
           `${push.name} ${push.title} ${push.body}`
             .toLocaleLowerCase("ru")
@@ -426,8 +422,8 @@ export default function Home() {
       }
       if (sort === "orders") {
         return (
-          metricsFor(b, goalId, orderProjectId).orders -
-          metricsFor(a, goalId, orderProjectId).orders
+          metricsFor(b, goalId).orders -
+          metricsFor(a, goalId).orders
         );
       }
       return new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime();
@@ -435,10 +431,9 @@ export default function Home() {
   }, [
     data.pushes,
     goalId,
-    orderProjectId,
     period,
-    projectId,
     query,
+    selectedProjectSet,
     sort,
   ]);
 
@@ -449,24 +444,21 @@ export default function Home() {
   );
 
   useEffect(() => {
-    const fallbackBuyers = visiblePushes.reduce(
-      (sum, push) =>
-        sum + metricsFor(push, goalId, orderProjectId).buyers,
-      0,
-    );
     const campaignIds = visiblePushes
       .map((push) => push.databaseId)
       .filter((value): value is number => Boolean(value));
+    const projectIds = visiblePushes.map((push) => push.projectId);
+    const requestKey =
+      `${goalId}:${campaignIds.join(",")}:${projectIds.join(",")}`;
     if (!campaignIds.length || campaignIds.length !== visiblePushes.length) {
       return;
     }
 
     const controller = new AbortController();
-    const requestKey = `${goalId}:${orderProjectId}:${campaignIds.join(",")}`;
     const params = new URLSearchParams({
       goalId,
-      orderProjectId,
       campaignIds: campaignIds.join(","),
+      projectIds: projectIds.join(","),
     });
     fetch(`/api/buyers?${params}`, {
       cache: "no-store",
@@ -480,26 +472,26 @@ export default function Home() {
         setTotalBuyerResult({
           key: requestKey,
           buyers: Number(payload.buyers),
+          error: false,
         });
       })
       .catch((error: unknown) => {
         if (error instanceof DOMException && error.name === "AbortError") return;
-        setTotalBuyerResult({ key: requestKey, buyers: fallbackBuyers });
-      });
+        setTotalBuyerResult({ key: requestKey, buyers: null, error: true });
+    });
     return () => controller.abort();
-  }, [goalId, orderProjectId, visiblePushes]);
+  }, [goalId, visiblePushes]);
 
   const totals = useMemo(
     () =>
       visiblePushes.reduce(
         (acc, push) => {
-          const goal = metricsFor(push, goalId, orderProjectId);
+          const goal = metricsFor(push, goalId);
           acc.sent += push.sent;
           acc.delivered += push.delivered;
           acc.clicked += push.clicked;
           acc.notDelivered += push.notDelivered;
           acc.orders += goal.orders;
-          acc.buyers += goal.buyers;
           acc.revenue += goal.revenue;
           goal.latency.forEach((value, index) => {
             acc.latency[index] += value;
@@ -512,54 +504,59 @@ export default function Home() {
           clicked: 0,
           notDelivered: 0,
           orders: 0,
-          buyers: 0,
           revenue: 0,
           latency: [0, 0, 0, 0],
         },
       ),
-    [goalId, orderProjectId, visiblePushes],
+    [goalId, visiblePushes],
   );
-  const totalBuyerRequestKey = `${goalId}:${orderProjectId}:${visiblePushes
-    .map((push) => push.databaseId)
-    .filter((value): value is number => Boolean(value))
-    .join(",")}`;
-  const resolvedTotalBuyers =
-    totalBuyerResult?.key === totalBuyerRequestKey
-      ? totalBuyerResult.buyers
-      : totals.buyers;
+  const totalBuyerRequestKey =
+    `${goalId}:${visiblePushes
+      .map((push) => push.databaseId)
+      .filter((value): value is number => Boolean(value))
+      .join(",")}:${visiblePushes.map((push) => push.projectId).join(",")}`;
+  const resolvedTotalBuyerResult =
+    visiblePushes.length === 0
+      ? { buyers: 0, error: false }
+      : totalBuyerResult?.key === totalBuyerRequestKey
+        ? totalBuyerResult
+        : { buyers: null, error: false };
+  const resolvedTotalBuyers = resolvedTotalBuyerResult.buyers;
 
   const selected =
     visiblePushes.find((push) => push.id === selectedId) ??
     visiblePushes[0] ??
     data.pushes[0];
   const selectedGoal = selected
-    ? metricsFor(selected, goalId, orderProjectId)
+    ? metricsFor(selected, goalId)
     : emptyGoalMetrics;
   const currentGoal = data.goals.find((goal) => goal.id === goalId);
-  const currentProject = data.projects.find(
-    (project) => project.id === projectId,
-  );
   const selectedProject = data.projects.find(
     (project) => project.id === selected?.projectId,
   );
-  const currentOrderProject = data.projects.find(
-    (project) => project.id === orderProjectId,
-  );
+  const projectScopeName =
+    selectedProjectIds.length === data.projects.length
+      ? "Все проекты"
+      : selectedProjectIds.length === 1
+        ? (data.projects.find(
+            (project) => project.id === selectedProjectIds[0],
+          )?.shortName ?? "Выбранный проект")
+        : `${selectedProjectIds.length} проекта`;
   const avgCtr =
     visiblePushes.reduce(
       (sum, push) => sum + push.clicked / Math.max(push.delivered, 1),
       0,
     ) / Math.max(visiblePushes.length, 1);
   const topPush = visiblePushes
-    .filter((push) => metricsFor(push, goalId, orderProjectId).orders > 0)
+    .filter((push) => metricsFor(push, goalId).orders > 0)
     .sort(
       (a, b) =>
-        metricsFor(b, goalId, orderProjectId).orders /
+        metricsFor(b, goalId).orders /
           Math.max(b.clicked, 1) -
-          metricsFor(a, goalId, orderProjectId).orders /
+          metricsFor(a, goalId).orders /
             Math.max(a.clicked, 1) ||
-        metricsFor(b, goalId, orderProjectId).orders -
-          metricsFor(a, goalId, orderProjectId).orders,
+        metricsFor(b, goalId).orders -
+          metricsFor(a, goalId).orders,
     )[0];
   const bestCtrPush = [...visiblePushes].sort(
     (a, b) =>
@@ -574,9 +571,9 @@ export default function Home() {
       return (push.clicked / Math.max(push.delivered, 1)) * 100;
     }
     if (metric === "revenue") {
-      return metricsFor(push, goalId, orderProjectId).revenue;
+      return metricsFor(push, goalId).revenue;
     }
-    return metricsFor(push, goalId, orderProjectId).orders;
+    return metricsFor(push, goalId).orders;
   };
   const chartMax = Math.max(...chartPushes.map(chartMetric), 1);
   const formatChartMetric = (value: number) => {
@@ -601,7 +598,6 @@ export default function Home() {
       const params = new URLSearchParams({
         campaignId: String(selected.databaseId),
         goalId,
-        orderProjectId,
       });
       const response = await fetch(`/api/purchases?${params}`, {
         cache: "no-store",
@@ -678,45 +674,22 @@ export default function Home() {
         </header>
 
         <section className="command-bar" aria-label="Фильтры отчёта">
-          <label className="command-control project-filter">
-            <span>Проект пуша</span>
-            <select
-              value={projectId}
-              onChange={(event) => setProjectId(event.target.value)}
-            >
-              <option value="all">Все проекты · {data.pushes.length}</option>
-              {data.projects.map((project) => (
-                <option key={project.id} value={project.id}>
-                  {project.name} ·{" "}
-                  {
-                    data.pushes.filter(
-                      (push) => push.projectId === project.id,
-                    ).length
-                  }
-                </option>
-              ))}
-            </select>
-          </label>
+          <ProjectMultiSelect
+            projects={data.projects.map((project) => ({
+              ...project,
+              count: data.pushes.filter(
+                (push) => push.projectId === project.id,
+              ).length,
+            }))}
+            selectedIds={selectedProjectIds}
+            onChange={setSelectedProjectIds}
+          />
           <label className="command-control goal-filter">
             <span>Цель / статус заказа</span>
             <select value={goalId} onChange={(event) => setGoalId(event.target.value)}>
               {data.goals.map((goal) => (
                 <option key={goal.id} value={goal.id}>
                   {goal.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="command-control order-project-filter">
-            <span>Где оформлен заказ</span>
-            <select
-              value={orderProjectId}
-              onChange={(event) => setOrderProjectId(event.target.value)}
-            >
-              <option value="all">Все проекты заказов</option>
-              {data.projects.map((project) => (
-                <option key={project.id} value={project.id}>
-                  {project.name}
                 </option>
               ))}
             </select>
@@ -777,9 +750,17 @@ export default function Home() {
           <article className="buyers-kpi">
             <span>Покупатели</span>
             <strong>
-              {number.format(resolvedTotalBuyers)}
+              {resolvedTotalBuyers === null
+                ? "—"
+                : number.format(resolvedTotalBuyers)}
             </strong>
-            <small>уникальные клиенты</small>
+            <small>
+              {resolvedTotalBuyerResult.error
+                ? "не удалось загрузить"
+                : resolvedTotalBuyers === null
+                  ? "считаем…"
+                  : "уникальные клиенты"}
+            </small>
           </article>
           <article>
             <span>Выручка</span>
@@ -795,11 +776,7 @@ export default function Home() {
           <article className="performance-panel">
             <div className="performance-head">
               <div>
-                <h2>
-                  {currentProject
-                    ? currentProject.shortName
-                    : "Динамика по рассылкам"}
-                </h2>
+                <h2>{projectScopeName}</h2>
               </div>
               <div className="metric-switch" aria-label="Метрика графика">
                 {[
@@ -823,9 +800,7 @@ export default function Home() {
               <div>
                 <span>
                   {metric === "orders"
-                    ? orderProjectId === "all"
-                      ? currentGoal?.shortName
-                      : currentOrderProject?.shortName
+                    ? currentGoal?.shortName
                     : metric === "ctr"
                       ? "CTR"
                       : "Выручка"}
@@ -842,17 +817,27 @@ export default function Home() {
                     ? "заказов в выборке"
                     : metric === "ctr"
                       ? `${number.format(totals.clicked)} открытий`
-                      : `${ordersText(totals.orders)} · ${buyersText(
-                          resolvedTotalBuyers,
-                        )}`}
+                      : resolvedTotalBuyers === null
+                        ? ordersText(totals.orders)
+                        : `${ordersText(totals.orders)} · ${buyersText(
+                            resolvedTotalBuyers,
+                          )}`}
                 </small>
               </div>
               <div className="summary-buyers">
                 <span>Покупатели</span>
                 <strong>
-                  {number.format(resolvedTotalBuyers)}
+                  {resolvedTotalBuyers === null
+                    ? "—"
+                    : number.format(resolvedTotalBuyers)}
                 </strong>
-                <small>уникальные клиенты</small>
+                <small>
+                  {resolvedTotalBuyerResult.error
+                    ? "не удалось загрузить"
+                    : resolvedTotalBuyers === null
+                      ? "считаем…"
+                      : "уникальные клиенты"}
+                </small>
               </div>
               <div className="summary-rate">
                 <span>Конверсия</span>
@@ -872,7 +857,7 @@ export default function Home() {
                     aria-label={`${push.title || push.name}: ${formatChartMetric(value)}${
                       metric === "orders"
                         ? `, ${buyersText(
-                            metricsFor(push, goalId, orderProjectId).buyers,
+                            metricsFor(push, goalId).buyers,
                           )}`
                         : ""
                     }`}
@@ -884,7 +869,7 @@ export default function Home() {
                       {metric === "orders" && (
                         <span className="chart-buyers">
                           {buyersText(
-                            metricsFor(push, goalId, orderProjectId).buyers,
+                            metricsFor(push, goalId).buyers,
                           )}
                         </span>
                       )}
@@ -920,7 +905,7 @@ export default function Home() {
                 <div className="signal-rate">
                   <strong>
                     {percent(
-                      metricsFor(topPush, goalId, orderProjectId).orders,
+                      metricsFor(topPush, goalId).orders,
                       topPush.clicked,
                     )}
                   </strong>
@@ -929,12 +914,12 @@ export default function Home() {
                 <div className="signal-facts">
                   <span>
                     {ordersText(
-                      metricsFor(topPush, goalId, orderProjectId).orders,
+                      metricsFor(topPush, goalId).orders,
                     )}
                   </span>
                   <span>
                     {buyersText(
-                      metricsFor(topPush, goalId, orderProjectId).buyers,
+                      metricsFor(topPush, goalId).buyers,
                     )}
                   </span>
                   <span>CTR {percent(topPush.clicked, topPush.delivered)}</span>
@@ -949,7 +934,8 @@ export default function Home() {
                 <h2>Заказов пока нет</h2>
                 <div className="signal-empty-copy">
                   <p>
-                    В выбранном срезе нет заказов после клика по пушу.
+                    В выбранном срезе нет заказов, сделанных в проекте
+                    соответствующего пуша.
                   </p>
                 </div>
                 {bestCtrPush && (
@@ -1017,11 +1003,7 @@ export default function Home() {
                 </thead>
                 <tbody>
                   {visiblePushes.map((push) => {
-                    const goal = metricsFor(
-                      push,
-                      goalId,
-                      orderProjectId,
-                    );
+                    const goal = metricsFor(push, goalId);
                     return (
                       <tr
                         key={push.id}

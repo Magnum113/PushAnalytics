@@ -1,0 +1,1391 @@
+{
+  "codeGoalPoints": {
+    "05-app": [
+      "10",
+      "11"
+    ],
+    "blizko-app": [
+      "97f9a0dd-62d5-4e6c-8538-d4d00ffe221a",
+      "af005e5f-d68b-462d-9dbb-c3b5e9a9617b"
+    ],
+    "blizko-in-05": [
+      "70e2ff71-c63d-4061-a1c3-4282860287aa",
+      "998ee3ed-7579-43f9-8fe1-4129fb0805f6",
+      "a1e1fd26-d7fd-416a-8447-b528dc8e12cd"
+    ]
+  },
+  "codeGoals": [
+    {
+      "id": "blizko-app",
+      "name": "Заказы Blizko (отдельное приложение)",
+      "shortName": "Blizko · приложение"
+    },
+    {
+      "id": "05-app",
+      "name": "Заказы в приложении (ИМ)",
+      "shortName": "05.ru · приложение"
+    },
+    {
+      "id": "blizko-in-05",
+      "name": "Заказ в Blizko",
+      "shortName": "Blizko внутри 05.ru"
+    },
+    {
+      "id": "all-orders",
+      "name": "Заказы",
+      "shortName": "Все заказы"
+    }
+  ],
+  "codeOrderProjectPoints": {
+    "05-main": [
+      "10",
+      "11",
+      "43bce559-5c95-4967-82d9-3985cc97d614",
+      "9"
+    ],
+    "blizko-app": [
+      "97f9a0dd-62d5-4e6c-8538-d4d00ffe221a",
+      "a349e806-a88e-432b-be10-0d8746f4d6e5",
+      "af005e5f-d68b-462d-9dbb-c3b5e9a9617b"
+    ],
+    "blizko-in-05": [
+      "70e2ff71-c63d-4061-a1c3-4282860287aa",
+      "998ee3ed-7579-43f9-8fe1-4129fb0805f6",
+      "a1e1fd26-d7fd-416a-8447-b528dc8e12cd"
+    ]
+  },
+  "configHash": "fa9e507866382223c9e173c9484b7e8e9f5241a660bac754a230eef06b01fc18",
+  "database": {
+    "goals": [
+      {
+        "description": "Заказы доставки продуктов из отдельного приложения Blizko.",
+        "id": "blizko-app",
+        "is_active": true,
+        "name": "Заказы Blizko (отдельное приложение)",
+        "short_name": "Blizko · приложение",
+        "sort_order": 10
+      },
+      {
+        "description": "Заказы техники, оформленные в основном приложении 05.ru.",
+        "id": "05-app",
+        "is_active": true,
+        "name": "Заказы в приложении (ИМ)",
+        "short_name": "05.ru · приложение",
+        "sort_order": 20
+      },
+      {
+        "description": "Заказы доставки продуктов Blizko через сценарий внутри 05.ru.",
+        "id": "blizko-in-05",
+        "is_active": true,
+        "name": "Заказ в Blizko",
+        "short_name": "Blizko внутри 05.ru",
+        "sort_order": 30
+      },
+      {
+        "description": "Все заказы без ограничения на продукт, приложение или точку контакта.",
+        "id": "all-orders",
+        "is_active": true,
+        "name": "Заказы",
+        "short_name": "Все заказы",
+        "sort_order": 40
+      }
+    ],
+    "manualOverrides": [],
+    "orderProjectPoints": [
+      {
+        "notes": "Основное Android-приложение 05.ru.",
+        "point_id": "10",
+        "point_name": "Android приложение",
+        "project_id": "05-main"
+      },
+      {
+        "notes": "Основное iOS-приложение 05.ru.",
+        "point_id": "11",
+        "point_name": "iOS приложение",
+        "project_id": "05-main"
+      },
+      {
+        "notes": "Маркетплейс 05.ru.",
+        "point_id": "43bce559-5c95-4967-82d9-3985cc97d614",
+        "point_name": "Маркетплейс",
+        "project_id": "05-main"
+      },
+      {
+        "notes": "Основной веб-проект 05.ru.",
+        "point_id": "9",
+        "point_name": "Сайт",
+        "project_id": "05-main"
+      },
+      {
+        "notes": "Отдельное iOS-приложение Blizko.",
+        "point_id": "97f9a0dd-62d5-4e6c-8538-d4d00ffe221a",
+        "point_name": "blizkoios",
+        "project_id": "blizko-app"
+      },
+      {
+        "notes": "Тестовая Android-точка отдельного приложения Blizko.",
+        "point_id": "a349e806-a88e-432b-be10-0d8746f4d6e5",
+        "point_name": "blizkoandroidsandbox",
+        "project_id": "blizko-app"
+      },
+      {
+        "notes": "Отдельное Android-приложение Blizko.",
+        "point_id": "af005e5f-d68b-462d-9dbb-c3b5e9a9617b",
+        "point_name": "blizkoandroid",
+        "project_id": "blizko-app"
+      },
+      {
+        "notes": "Blizko внутри Android-приложения 05.ru.",
+        "point_id": "70e2ff71-c63d-4061-a1c3-4282860287aa",
+        "point_name": "AndroidAppDarkstore",
+        "project_id": "blizko-in-05"
+      },
+      {
+        "notes": "Blizko внутри iOS-приложения 05.ru.",
+        "point_id": "998ee3ed-7579-43f9-8fe1-4129fb0805f6",
+        "point_name": "IosAppDarkstore",
+        "project_id": "blizko-in-05"
+      },
+      {
+        "notes": "Blizko внутри 05.ru, веб-точка.",
+        "point_id": "a1e1fd26-d7fd-416a-8447-b528dc8e12cd",
+        "point_name": "Darkstore",
+        "project_id": "blizko-in-05"
+      }
+    ],
+    "projectRules": [
+      {
+        "is_active": false,
+        "match_field": "folder_internal_id",
+        "match_value": "0e07c12c-bd8a-48a1-b033-10aec22bc954",
+        "notes": "Папка содержит рассылки для разных приложений. Заменено точными правилами по mailing_internal_id после проверки карточек Mindbox 2026-07-23.",
+        "priority": 100,
+        "project_id": "blizko-in-05"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "04980b44-4d95-47e8-8190-e9662918ee21",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "089992ea-63f7-4f8a-9ef8-71509343f3b4",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "08a2fc8a-1a4a-4d8d-a737-863d5080a6db",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "09057068-11c6-4aa7-aa42-f410625edce6",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "0b47db64-ecd0-4a55-b178-6b4ed5c8723e",
+        "notes": "iOS приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "0d11acfa-0e8c-4205-946d-9ddbffe2cdf5",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "0f5997b1-f383-446f-badc-50e638ddf054",
+        "notes": "iOS приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "13367e27-9e3c-4d57-9505-08774abdd989",
+        "notes": "iOS приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "15181c7c-95ed-4702-aad7-3c3aa222a917",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-in-05"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "196ba527-e791-4687-9a5e-62c8403e6b01",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "19805fbd-10aa-4095-8cc1-b0d7dc74c2c5",
+        "notes": "iOS приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "1c1f6826-f49b-4589-a631-680976a436bf",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "2c7d2c5b-36a3-472b-a0ee-2a2cff7f1dc4",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "2cf99025-ddd3-4bd8-9734-e996c200294f",
+        "notes": "Android приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "2ff802ce-5594-445d-9a41-1847f8c6a01e",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "31204e9b-ac91-41f2-b296-14ad5479066d",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "32e9a545-b303-40a7-9e1a-dbb3fe6d3ff4",
+        "notes": "Android приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "33a0553b-4c50-4710-9e9c-b05ed1a11a9a",
+        "notes": "Android приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "3580fd29-37f1-40e0-9928-8888617f3e69",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-in-05"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "3b0fdd48-e06e-437c-ab4f-13437d6969e1",
+        "notes": "Android приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "407d19e2-3600-453b-b04f-d9cdf2afe427",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-in-05"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "476c4e1a-5e38-43db-9349-ea41da6820a2",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "5236a3f8-1d3d-4d2e-9684-d9f65153d526",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-in-05"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "575afbcb-5a60-4785-b81f-8dcaae234c22",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "58ef4c60-5360-45a0-a4b0-d7e004309895",
+        "notes": "iOS приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "5a35a95a-ce9c-475a-a075-a7e0eddc59c5",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-in-05"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "5a7d66df-6e61-4075-8de3-4ab623241b9a",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-in-05"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "61fed3f1-e3c9-4338-9a9f-913187a89d21",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "647b0741-7c26-4489-a6bf-e5aeb33b0d10",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "658f045e-4e4c-48a3-aacc-069172e1711b",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "698b6d36-cbe1-4dfd-aa17-87899e13a99e",
+        "notes": "iOS приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "71654561-bce5-4949-b965-faa284b98178",
+        "notes": "iOS приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "720a5f26-1676-4071-8221-c8eb14537c11",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "7312ff9c-309a-43af-abc6-b89fd65109df",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "7bdc29c4-ab1c-4c92-9551-3fa668ef1f5a",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "7d132de9-d8d9-4c79-8c8e-6129f3f075c6",
+        "notes": "iOS приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "7d82b510-1b22-401c-af1a-01968a213e74",
+        "notes": "iOS приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "84d2aab7-53cd-4edf-a9c9-70733a29ba07",
+        "notes": "iOS приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "908fba62-4430-4e27-8970-5bf85411bf82",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-in-05"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "96b6e93f-f195-45ef-805b-6e0725f1cc7a",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-in-05"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "98bddd52-1389-4854-936a-83be83ac4e6d",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "9ce2cf97-62a5-47a2-b5bb-775d71bad04d",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "9e1dfa36-cc74-47f1-9ca8-fa01bff717e3",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-in-05"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "a348f229-f68c-41be-bfa5-7e2304706895",
+        "notes": "Android приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "a66ff1c3-64ef-4172-bace-97be5cd36b0f",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "a7f32acf-dd23-4d87-83db-1cca1a2b107d",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "a9d334c3-ee70-4a9e-b19d-8ee6b979bbed",
+        "notes": "Android приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "ab43d55c-24a7-4b0f-ba14-1f35b0729586",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-in-05"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "abe1b7ab-7ed9-4b7a-9b02-259538d0c11a",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "af13ecf7-bb41-41de-a69c-133e863c53d2",
+        "notes": "Android приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "af214f8d-1d72-416b-9603-adef6ebc6d44",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "b36ab19a-0026-4397-82e4-383ed8a46aab",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "bb920a25-5b08-4000-b49c-b159302d4950",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "bf61dcc2-8aa9-4958-9313-d227bb1a66b5",
+        "notes": "iOS приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "ca5e56f7-3ace-4736-b361-e03c53087964",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "d29056a9-480e-4d2c-a42d-84d4bdd23bd7",
+        "notes": "Android приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "d464ee9b-3cd6-4c94-894d-eb6bccb5055f",
+        "notes": "Android приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "d6f952b5-7efd-401c-8341-d052b2c1772e",
+        "notes": "iOS приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "d9140463-3693-4375-af1f-2dc57fb4b584",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "e196139d-0ce6-4c5b-9d4a-a41d9c7cf3b6",
+        "notes": "iOS приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "e1e30f77-0892-4e80-9785-3f046cc1c471",
+        "notes": "iOS приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "e2e00ca9-f00a-4c1b-b416-72703ad85bbb",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "e5d3a7ea-bbbd-423c-8734-02dcc57fd9f0",
+        "notes": "Android приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "e6ddca1d-a255-41db-9575-31c1d7b89df5",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "eb071cf3-526e-411f-9245-4bbe4107b133",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-in-05"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "ee44ad48-4bb3-48bc-8f90-3a5996fd36af",
+        "notes": "iOS приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "ef2027ae-c913-44e4-9044-4206f0b3c83d",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "ef5d6067-cbd7-4d6b-b639-668fd51c4819",
+        "notes": "Android приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "f3d9225b-52fc-4bef-8f8d-5cb8dede3dba",
+        "notes": "Android приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "f61082ac-d793-4e0a-9da8-95c38c5a2795",
+        "notes": "Android приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "f614f8f3-0f90-4bd0-a3db-1a2e8ac5486a",
+        "notes": "iOS приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "f6cc866b-33cf-44ec-9d4b-b6dbe5f22a7a",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "f8748fdd-0578-49ef-b312-da5a64b50bf5",
+        "notes": "Android приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "fae78fec-7795-450e-aa83-80734942370c",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "05-main"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "fc18cd7d-6d66-405b-a8fb-ec3a403d980a",
+        "notes": "iOS приложение 05ru; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-in-05"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "fca1e0a0-efe5-4763-9534-086b543366a0",
+        "notes": "Android приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "fe9ddb59-9449-4cf1-835e-cd5bab556661",
+        "notes": "Android приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      },
+      {
+        "is_active": true,
+        "match_field": "mailing_internal_id",
+        "match_value": "ffdec267-74fa-4dd2-879a-f17ae850ee5a",
+        "notes": "Android приложение Blizko; проверено в Mindbox 2026-07-24.",
+        "priority": 10,
+        "project_id": "blizko-app"
+      }
+    ],
+    "projects": [
+      {
+        "description": "Push-рассылки отдельного приложения доставки продуктов Blizko.",
+        "id": "blizko-app",
+        "is_active": true,
+        "name": "Отдельное приложение Blizko",
+        "short_name": "Blizko · приложение",
+        "sort_order": 10
+      },
+      {
+        "description": "Push-рассылки основного приложения 05.ru, включая интернет-магазин техники.",
+        "id": "05-main",
+        "is_active": true,
+        "name": "Основной проект 05.ru",
+        "short_name": "05.ru · основной проект",
+        "sort_order": 20
+      },
+      {
+        "description": "Push-рассылки сценария Blizko, встроенного в основное приложение 05.ru.",
+        "id": "blizko-in-05",
+        "is_active": true,
+        "name": "Blizko внутри приложения 05.ru",
+        "short_name": "Blizko внутри 05.ru",
+        "sort_order": 30
+      }
+    ]
+  },
+  "expectedFolders": {
+    "Пуши в отдельном приложении Близко": {
+      "internalId": "5973dc8f-9411-4de3-a53b-32c87497812c",
+      "projectId": "blizko-app"
+    },
+    "Пуши по 05ру в приложении 05ру": {
+      "internalId": "b4476805-41cf-4e89-a51f-cd88c25ef859",
+      "projectId": "05-main"
+    },
+    "Пуши по Близко в приложении 05ру": {
+      "internalId": "88976d9a-80ba-47e0-b514-32b833ba3350",
+      "projectId": "blizko-in-05"
+    }
+  },
+  "files": {
+    "data/project_rules.json": {
+      "content": {
+        "campaignGroupOverrides": {
+          "089992ea-63f7-4f8a-9ef8-71509343f3b4": "2026-06-27-conditioners-comfort",
+          "2c7d2c5b-36a3-472b-a0ee-2a2cff7f1dc4": "2026-06-19-conditioners-heat",
+          "7d132de9-d8d9-4c79-8c8e-6129f3f075c6": "2026-06-05-blizko-technical",
+          "ef2027ae-c913-44e4-9044-4206f0b3c83d": "2026-06-27-conditioners-comfort",
+          "f61082ac-d793-4e0a-9da8-95c38c5a2795": "2026-06-05-blizko-technical",
+          "f614f8f3-0f90-4bd0-a3db-1a2e8ac5486a": "2026-07-15-blizko-survey-v1",
+          "f6cc866b-33cf-44ec-9d4b-b6dbe5f22a7a": "2026-06-19-conditioners-heat",
+          "fca1e0a0-efe5-4763-9534-086b543366a0": "2026-07-15-blizko-survey-v1"
+        },
+        "folderRules": {},
+        "mailingOverrides": {
+          "04980b44-4d95-47e8-8190-e9662918ee21": "05-main",
+          "089992ea-63f7-4f8a-9ef8-71509343f3b4": "05-main",
+          "08a2fc8a-1a4a-4d8d-a737-863d5080a6db": "05-main",
+          "09057068-11c6-4aa7-aa42-f410625edce6": "05-main",
+          "0b47db64-ecd0-4a55-b178-6b4ed5c8723e": "blizko-app",
+          "0d11acfa-0e8c-4205-946d-9ddbffe2cdf5": "05-main",
+          "0f5997b1-f383-446f-badc-50e638ddf054": "blizko-app",
+          "13367e27-9e3c-4d57-9505-08774abdd989": "blizko-app",
+          "15181c7c-95ed-4702-aad7-3c3aa222a917": "blizko-in-05",
+          "196ba527-e791-4687-9a5e-62c8403e6b01": "05-main",
+          "19805fbd-10aa-4095-8cc1-b0d7dc74c2c5": "blizko-app",
+          "1c1f6826-f49b-4589-a631-680976a436bf": "05-main",
+          "2c7d2c5b-36a3-472b-a0ee-2a2cff7f1dc4": "05-main",
+          "2cf99025-ddd3-4bd8-9734-e996c200294f": "blizko-app",
+          "2ff802ce-5594-445d-9a41-1847f8c6a01e": "05-main",
+          "31204e9b-ac91-41f2-b296-14ad5479066d": "05-main",
+          "32e9a545-b303-40a7-9e1a-dbb3fe6d3ff4": "blizko-app",
+          "33a0553b-4c50-4710-9e9c-b05ed1a11a9a": "blizko-app",
+          "3580fd29-37f1-40e0-9928-8888617f3e69": "blizko-in-05",
+          "3b0fdd48-e06e-437c-ab4f-13437d6969e1": "blizko-app",
+          "407d19e2-3600-453b-b04f-d9cdf2afe427": "blizko-in-05",
+          "476c4e1a-5e38-43db-9349-ea41da6820a2": "05-main",
+          "5236a3f8-1d3d-4d2e-9684-d9f65153d526": "blizko-in-05",
+          "575afbcb-5a60-4785-b81f-8dcaae234c22": "05-main",
+          "58ef4c60-5360-45a0-a4b0-d7e004309895": "blizko-app",
+          "5a35a95a-ce9c-475a-a075-a7e0eddc59c5": "blizko-in-05",
+          "5a7d66df-6e61-4075-8de3-4ab623241b9a": "blizko-in-05",
+          "61fed3f1-e3c9-4338-9a9f-913187a89d21": "05-main",
+          "647b0741-7c26-4489-a6bf-e5aeb33b0d10": "05-main",
+          "658f045e-4e4c-48a3-aacc-069172e1711b": "05-main",
+          "698b6d36-cbe1-4dfd-aa17-87899e13a99e": "blizko-app",
+          "71654561-bce5-4949-b965-faa284b98178": "blizko-app",
+          "720a5f26-1676-4071-8221-c8eb14537c11": "05-main",
+          "7312ff9c-309a-43af-abc6-b89fd65109df": "05-main",
+          "7bdc29c4-ab1c-4c92-9551-3fa668ef1f5a": "05-main",
+          "7d132de9-d8d9-4c79-8c8e-6129f3f075c6": "blizko-app",
+          "7d82b510-1b22-401c-af1a-01968a213e74": "blizko-app",
+          "84d2aab7-53cd-4edf-a9c9-70733a29ba07": "blizko-app",
+          "908fba62-4430-4e27-8970-5bf85411bf82": "blizko-in-05",
+          "96b6e93f-f195-45ef-805b-6e0725f1cc7a": "blizko-in-05",
+          "98bddd52-1389-4854-936a-83be83ac4e6d": "05-main",
+          "9ce2cf97-62a5-47a2-b5bb-775d71bad04d": "05-main",
+          "9e1dfa36-cc74-47f1-9ca8-fa01bff717e3": "blizko-in-05",
+          "a348f229-f68c-41be-bfa5-7e2304706895": "blizko-app",
+          "a66ff1c3-64ef-4172-bace-97be5cd36b0f": "05-main",
+          "a7f32acf-dd23-4d87-83db-1cca1a2b107d": "05-main",
+          "a9d334c3-ee70-4a9e-b19d-8ee6b979bbed": "blizko-app",
+          "ab43d55c-24a7-4b0f-ba14-1f35b0729586": "blizko-in-05",
+          "abe1b7ab-7ed9-4b7a-9b02-259538d0c11a": "05-main",
+          "af13ecf7-bb41-41de-a69c-133e863c53d2": "blizko-app",
+          "af214f8d-1d72-416b-9603-adef6ebc6d44": "05-main",
+          "b36ab19a-0026-4397-82e4-383ed8a46aab": "05-main",
+          "bb920a25-5b08-4000-b49c-b159302d4950": "05-main",
+          "bf61dcc2-8aa9-4958-9313-d227bb1a66b5": "blizko-app",
+          "ca5e56f7-3ace-4736-b361-e03c53087964": "05-main",
+          "d29056a9-480e-4d2c-a42d-84d4bdd23bd7": "blizko-app",
+          "d464ee9b-3cd6-4c94-894d-eb6bccb5055f": "blizko-app",
+          "d6f952b5-7efd-401c-8341-d052b2c1772e": "blizko-app",
+          "d9140463-3693-4375-af1f-2dc57fb4b584": "05-main",
+          "e196139d-0ce6-4c5b-9d4a-a41d9c7cf3b6": "blizko-app",
+          "e1e30f77-0892-4e80-9785-3f046cc1c471": "blizko-app",
+          "e2e00ca9-f00a-4c1b-b416-72703ad85bbb": "05-main",
+          "e5d3a7ea-bbbd-423c-8734-02dcc57fd9f0": "blizko-app",
+          "e6ddca1d-a255-41db-9575-31c1d7b89df5": "05-main",
+          "eb071cf3-526e-411f-9245-4bbe4107b133": "blizko-in-05",
+          "ee44ad48-4bb3-48bc-8f90-3a5996fd36af": "blizko-app",
+          "ef2027ae-c913-44e4-9044-4206f0b3c83d": "05-main",
+          "ef5d6067-cbd7-4d6b-b639-668fd51c4819": "blizko-app",
+          "f3d9225b-52fc-4bef-8f8d-5cb8dede3dba": "05-main",
+          "f61082ac-d793-4e0a-9da8-95c38c5a2795": "blizko-app",
+          "f614f8f3-0f90-4bd0-a3db-1a2e8ac5486a": "blizko-app",
+          "f6cc866b-33cf-44ec-9d4b-b6dbe5f22a7a": "05-main",
+          "f8748fdd-0578-49ef-b312-da5a64b50bf5": "blizko-app",
+          "fae78fec-7795-450e-aa83-80734942370c": "05-main",
+          "fc18cd7d-6d66-405b-a8fb-ec3a403d980a": "blizko-in-05",
+          "fca1e0a0-efe5-4763-9534-086b543366a0": "blizko-app",
+          "fe9ddb59-9449-4cf1-835e-cd5bab556661": "blizko-app",
+          "ffdec267-74fa-4dd2-879a-f17ae850ee5a": "blizko-app"
+        }
+      },
+      "sha256": "f03975ed6f8f1a3857cb26feb16c81e71f7a0fd3fc91069916f25e10b4f28655"
+    },
+    "data/push_content.json": {
+      "content": {
+        "04980b44-4d95-47e8-8190-e9662918ee21": {
+          "application": "iOS приложение 05ru",
+          "body": "На сайте и в приложении могут быть перебои. Мы уже работаем над этим и скоро всё поправим.",
+          "title": "Немного технических помех"
+        },
+        "089992ea-63f7-4f8a-9ef8-71509343f3b4": {
+          "application": "Android приложение 05ru",
+          "body": "Пока на улице ещё терпимо, самое время подумать о прохладе дома. Скидка до 10% на кондиционеры 🌬️",
+          "title": "Комфорт заранее 🏠"
+        },
+        "08a2fc8a-1a4a-4d8d-a737-863d5080a6db": {
+          "application": "Android приложение 05ru",
+          "body": "Подготовьтесь к Курбан-байраму с выгодой — порадуйте себя и близких приятными подарками 🌙",
+          "title": "Техника со скидкой ✨"
+        },
+        "09057068-11c6-4aa7-aa42-f410625edce6": {
+          "application": "Android приложение 05ru",
+          "body": "На сайте и в приложении могут быть перебои. Мы уже работаем над этим и скоро всё поправим.",
+          "title": "Немного технических помех"
+        },
+        "0b47db64-ecd0-4a55-b178-6b4ed5c8723e": {
+          "application": "iOS приложение Blizko",
+          "body": "Успейте купить любимые товары по выгодным ценам. Предложения уже доступны.",
+          "title": "🔥 Обновили скидки недели"
+        },
+        "0d11acfa-0e8c-4205-946d-9ddbffe2cdf5": {
+          "application": "Android приложение 05ru",
+          "body": "Собрали полезные товары для дома — выбирайте всё нужное к празднику Курбан-байрам ✨",
+          "title": "Подборка внутри 👈"
+        },
+        "0f5997b1-f383-446f-badc-50e638ddf054": {
+          "application": "iOS приложение Blizko",
+          "body": "Соки, лимонады и холодный чай с быстрой доставкой ❄️",
+          "title": "Что будете пить? 🥤"
+        },
+        "13367e27-9e3c-4d57-9505-08774abdd989": {
+          "application": "iOS приложение Blizko",
+          "body": "",
+          "title": "Расскажите, как прошёл ваш первый заказ в Близко и что мы можем улучшить — это займёт пару минут 💚"
+        },
+        "15181c7c-95ed-4702-aad7-3c3aa222a917": {
+          "application": "Android приложение 05ru",
+          "body": "Бренд, который знают и любят многие, теперь в Близко с быстрой доставкой 🚚",
+          "title": "Та самая Равза 😋"
+        },
+        "196ba527-e791-4687-9a5e-62c8403e6b01": {
+          "application": "iOS приложение 05ru",
+          "body": "Пройдите короткий опрос и поделитесь впечатлениями о покупке в 05.ru.",
+          "title": "Расскажите о своей покупке👋"
+        },
+        "19805fbd-10aa-4095-8cc1-b0d7dc74c2c5": {
+          "application": "iOS приложение Blizko",
+          "body": "Салаты, сэндвичи и готовые блюда с доставкой 🚚",
+          "title": "Вкусно и быстро 😋"
+        },
+        "1c1f6826-f49b-4589-a631-680976a436bf": {
+          "application": "iOS приложение 05ru",
+          "body": "Сдайте старый iPhone в трейд-ин, а новый купите с рассрочкой без переплат 💫",
+          "title": "С новым — удобнее 📱"
+        },
+        "2c7d2c5b-36a3-472b-a0ee-2a2cff7f1dc4": {
+          "application": "Android приложение 05ru",
+          "body": "Позаботьтесь о прохладе заранее — скидка до 10% на кондиционеры действует до 5 июля 🌬️",
+          "title": "Жара уже идёт ☀️"
+        },
+        "2cf99025-ddd3-4bd8-9734-e996c200294f": {
+          "application": "Android приложение Blizko",
+          "body": "Всё, что нужно для футбольного вечера 😋",
+          "title": "Чипсы и кола 🔥"
+        },
+        "2ff802ce-5594-445d-9a41-1847f8c6a01e": {
+          "application": "Android приложение 05ru",
+          "body": "Кондиционеры в рассрочку 0% для комфортного лета дома — для вас и ваших близких 🏠",
+          "title": "Прохлада без переплат 🌬️"
+        },
+        "31204e9b-ac91-41f2-b296-14ad5479066d": {
+          "application": "iOS приложение 05ru",
+          "body": "Выбирайте кондиционеры со скидкой до 10% до 5 июля ❄️",
+          "title": "Пока не припекло ☀️"
+        },
+        "32e9a545-b303-40a7-9e1a-dbb3fe6d3ff4": {
+          "application": "Android приложение Blizko",
+          "body": "Добавьте любимые фрукты в корзину и оформляйте заказ 🚚",
+          "title": "Больше витаминов 🍊"
+        },
+        "33a0553b-4c50-4710-9e9c-b05ed1a11a9a": {
+          "application": "Android приложение Blizko",
+          "body": "Успейте купить любимые товары по выгодным ценам. Предложения уже доступны.",
+          "title": "🔥 Обновили скидки недели"
+        },
+        "3580fd29-37f1-40e0-9928-8888617f3e69": {
+          "application": "Android приложение 05ru",
+          "body": "Быстро привезём холодное мороженое к вам домой 🍦",
+          "title": "За окном +30 ☀️"
+        },
+        "3b0fdd48-e06e-437c-ab4f-13437d6969e1": {
+          "application": "Android приложение Blizko",
+          "body": "",
+          "title": "Расскажите, как прошёл ваш первый заказ в Близко и что мы можем улучшить — это займёт пару минут 💚"
+        },
+        "407d19e2-3600-453b-b04f-d9cdf2afe427": {
+          "application": "iOS приложение 05ru",
+          "body": "Хорошо, что ваши помидоры везёт не Camry, а курьер Близко 🙋🏻",
+          "title": "Бензин дорожает ⛽️"
+        },
+        "476c4e1a-5e38-43db-9349-ea41da6820a2": {
+          "application": "iOS приложение 05ru",
+          "body": "Кондиционеры в рассрочку 0% для комфортного лета дома — для вас и ваших близких 🏠",
+          "title": "Прохлада без переплат 🌬️"
+        },
+        "5236a3f8-1d3d-4d2e-9684-d9f65153d526": {
+          "application": "iOS приложение 05ru",
+          "body": "Бренд, который знают и любят многие, теперь в Близко с быстрой доставкой 🚚",
+          "title": "Та самая Равза 😋"
+        },
+        "575afbcb-5a60-4785-b81f-8dcaae234c22": {
+          "application": "Android приложение 05ru",
+          "body": "Поможем подобрать кондиционер, а покупка станет приятнее со скидкой до 10% ❄️",
+          "title": "Не ждите пекла 🌡️"
+        },
+        "58ef4c60-5360-45a0-a4b0-d7e004309895": {
+          "application": "iOS приложение Blizko",
+          "body": "",
+          "title": "Расскажите, как прошёл ваш первый заказ в Близко и что мы можем улучшить — это займёт пару минут 💚"
+        },
+        "5a35a95a-ce9c-475a-a075-a7e0eddc59c5": {
+          "application": "Android приложение 05ru",
+          "body": "Пусть пельмешки лежат в морозильнике — выручат, когда нет сил готовить 👨🏻‍🍳",
+          "title": "На всякий случай 🥟"
+        },
+        "5a7d66df-6e61-4075-8de3-4ab623241b9a": {
+          "application": "Android приложение 05ru",
+          "body": "Хорошо, что ваши помидоры везёт не Camry, а курьер Близко 🙋🏻",
+          "title": "Бензин дорожает ⛽️"
+        },
+        "61fed3f1-e3c9-4338-9a9f-913187a89d21": {
+          "application": "Android приложение 05ru",
+          "body": "Пусть Курбан-байрам принесёт в ваш дом тепло, уют и добрые встречи с близкими✨",
+          "title": "С праздником 🤍"
+        },
+        "647b0741-7c26-4489-a6bf-e5aeb33b0d10": {
+          "application": "iOS приложение 05ru",
+          "body": "Подготовьтесь к Курбан-байраму с выгодой — порадуйте себя и близких приятными подарками 🌙",
+          "title": "Техника со скидкой ✨"
+        },
+        "658f045e-4e4c-48a3-aacc-069172e1711b": {
+          "application": "iOS приложение 05ru",
+          "body": "Собрали полезные товары для дома — выбирайте всё нужное к празднику Курбан-байрам ✨",
+          "title": "Подборка внутри 👈"
+        },
+        "698b6d36-cbe1-4dfd-aa17-87899e13a99e": {
+          "application": "iOS приложение Blizko",
+          "body": "",
+          "title": "Заберите промокод за пару минут: ответьте на несколько вопросов о первом заказев Близко, а в конце получите новую скидку 💚"
+        },
+        "71654561-bce5-4949-b965-faa284b98178": {
+          "application": "iOS приложение Blizko",
+          "body": "Чуду, сытные блинчики и пирожки от Равзы уже ждут вас в Близко 😋",
+          "title": "Что сегодня на обед? 🥟"
+        },
+        "720a5f26-1676-4071-8221-c8eb14537c11": {
+          "application": "iOS приложение 05ru",
+          "body": "Пусть Курбан-байрам принесёт в ваш дом тепло, уют и добрые встречи с близкими✨",
+          "title": "С праздником 🤍"
+        },
+        "7312ff9c-309a-43af-abc6-b89fd65109df": {
+          "application": "Android приложение 05ru",
+          "body": "Забота о близких — это не ждать жары. Кондиционеры со скидкой до 10% до 5 июля ❄️",
+          "title": "Позаботьтесь вовремя ❤️"
+        },
+        "7bdc29c4-ab1c-4c92-9551-3fa668ef1f5a": {
+          "application": "iOS приложение 05ru",
+          "body": "Собрали всё для детей в одном месте",
+          "title": "Одежда и игрушки"
+        },
+        "7d132de9-d8d9-4c79-8c8e-6129f3f075c6": {
+          "application": "iOS приложение Blizko",
+          "body": "На сайте и в приложении могут быть перебои. Мы уже работаем над этим и скоро всё поправим.",
+          "title": "Немного технических помех"
+        },
+        "7d82b510-1b22-401c-af1a-01968a213e74": {
+          "application": "iOS приложение Blizko",
+          "body": "Всё, что нужно для футбольного вечера 😋",
+          "title": "Чипсы и кола 🔥"
+        },
+        "84d2aab7-53cd-4edf-a9c9-70733a29ba07": {
+          "application": "iOS приложение Blizko",
+          "body": "Чемпионат мира — отличный повод взять комбо с чипсами и любимым напитком 🥤",
+          "title": "Пора запасаться ⚽"
+        },
+        "908fba62-4430-4e27-8970-5bf85411bf82": {
+          "application": "iOS приложение 05ru",
+          "body": "Быстро привезём холодное мороженое к вам домой 🍦",
+          "title": "За окном +30 ☀️"
+        },
+        "96b6e93f-f195-45ef-805b-6e0725f1cc7a": {
+          "application": "Android приложение 05ru",
+          "body": "Всё для праздничного стола с доставкой от 30 минут 🚚 Продукты, сладости и напитки 🍫",
+          "title": "Курбан-байрам близко 🤍"
+        },
+        "98bddd52-1389-4854-936a-83be83ac4e6d": {
+          "application": "Android приложение 05ru",
+          "body": "Пройдите короткий опрос и поделитесь впечатлениями о покупке в 05.ru.",
+          "title": "Расскажите о своей покупке👋"
+        },
+        "9ce2cf97-62a5-47a2-b5bb-775d71bad04d": {
+          "application": "Android приложение 05ru",
+          "body": "Собрали всё для детей в одном месте",
+          "title": "Одежда и игрушки"
+        },
+        "9e1dfa36-cc74-47f1-9ca8-fa01bff717e3": {
+          "application": "iOS приложение 05ru",
+          "body": "Пусть пельмешки лежат в морозильнике — выручат, когда нет сил готовить 👨🏻‍🍳",
+          "title": "На всякий случай 🥟"
+        },
+        "a348f229-f68c-41be-bfa5-7e2304706895": {
+          "application": "Android приложение Blizko",
+          "body": "Соки, лимонады и холодный чай с быстрой доставкой ❄️",
+          "title": "Что будете пить? 🥤"
+        },
+        "a66ff1c3-64ef-4172-bace-97be5cd36b0f": {
+          "application": "Android приложение 05ru",
+          "body": "Легче отдыхать, работать и высыпаться. Кондиционеры в рассрочку 0% ❄️",
+          "title": "Пусть дома будет прохладно ❄️"
+        },
+        "a7f32acf-dd23-4d87-83db-1cca1a2b107d": {
+          "application": "Android приложение 05ru",
+          "body": "Выбирайте кондиционеры со скидкой до 10% до 5 июля ❄️",
+          "title": "Пока не припекло ☀️"
+        },
+        "a9d334c3-ee70-4a9e-b19d-8ee6b979bbed": {
+          "application": "Android приложение Blizko",
+          "body": "",
+          "title": "Расскажите, как прошёл ваш первый заказ в Близко и что мы можем улучшить — это займёт пару минут 💚"
+        },
+        "ab43d55c-24a7-4b0f-ba14-1f35b0729586": {
+          "application": "Android приложение 05ru",
+          "body": "Мясо, напитки, уголь, посуда и всё для пикника в одном заказе 🍖",
+          "title": "На пикник с комфортом 🧺"
+        },
+        "abe1b7ab-7ed9-4b7a-9b02-259538d0c11a": {
+          "application": "iOS приложение 05ru",
+          "body": "А в 05.ru кондиционеры в рассрочку 0% ❄️",
+          "title": "Жарко по-настоящему ☀️"
+        },
+        "af13ecf7-bb41-41de-a69c-133e863c53d2": {
+          "application": "Android приложение Blizko",
+          "body": "Чуду, сытные блинчики и пирожки от Равзы уже ждут вас в Близко 😋",
+          "title": "Что сегодня на обед? 🥟"
+        },
+        "af214f8d-1d72-416b-9603-adef6ebc6d44": {
+          "application": "Android приложение 05ru",
+          "body": "Поделитесь мнением о 05.ru",
+          "title": "Уделите пару минут 👋"
+        },
+        "b36ab19a-0026-4397-82e4-383ed8a46aab": {
+          "application": "iOS приложение 05ru",
+          "body": "Лучше заказать заранее с доставкой из маркетплейса",
+          "title": "Вода почти закончилась?"
+        },
+        "bb920a25-5b08-4000-b49c-b159302d4950": {
+          "application": "iOS приложение 05ru",
+          "body": "Поможем подобрать кондиционер, а покупка станет приятнее со скидкой до 10% ❄️",
+          "title": "Не ждите пекла 🌡️"
+        },
+        "bf61dcc2-8aa9-4958-9313-d227bb1a66b5": {
+          "application": "iOS приложение Blizko",
+          "body": "Комбо с чипсами и напитками уже ждёт в Близко 🥤",
+          "title": "К матчу готовы? ⚽"
+        },
+        "ca5e56f7-3ace-4736-b361-e03c53087964": {
+          "application": "iOS приложение 05ru",
+          "body": "Легче отдыхать, работать и высыпаться. Кондиционеры в рассрочку 0% ❄️",
+          "title": "Пусть дома будет прохладно ❄️"
+        },
+        "d29056a9-480e-4d2c-a42d-84d4bdd23bd7": {
+          "application": "Android приложение Blizko",
+          "body": "Чуду, пирожки и блины от Равзы уже в Близко. Ням 😋",
+          "title": "Любимый вкус ✨"
+        },
+        "d464ee9b-3cd6-4c94-894d-eb6bccb5055f": {
+          "application": "Android приложение Blizko",
+          "body": "Салаты, сэндвичи и готовые блюда с доставкой 🚚",
+          "title": "Вкусно и быстро 😋"
+        },
+        "d6f952b5-7efd-401c-8341-d052b2c1772e": {
+          "application": "iOS приложение Blizko",
+          "body": "",
+          "title": "Почему вы перестали пользоваться Близко? Поделитесь своим мнением — за участие в интервью подарим 1000 ₽. Запишитесь через анкету."
+        },
+        "d9140463-3693-4375-af1f-2dc57fb4b584": {
+          "application": "Android приложение 05ru",
+          "body": "А в 05.ru кондиционеры в рассрочку 0% ❄️",
+          "title": "Жарко по-настоящему ☀️"
+        },
+        "e196139d-0ce6-4c5b-9d4a-a41d9c7cf3b6": {
+          "application": "iOS приложение Blizko",
+          "body": "Добавьте любимые фрукты в корзину и оформляйте заказ 🚚",
+          "title": "Больше витаминов 🍊"
+        },
+        "e1e30f77-0892-4e80-9785-3f046cc1c471": {
+          "application": "iOS приложение Blizko",
+          "body": "Самое время взять комбо с чипсами и любимыми напитками 🔥",
+          "title": "ЧМ уже в разгаре ⚽"
+        },
+        "e2e00ca9-f00a-4c1b-b416-72703ad85bbb": {
+          "application": "iOS приложение 05ru",
+          "body": "Поделитесь мнением о 05.ru",
+          "title": "Уделите пару минут 👋"
+        },
+        "e5d3a7ea-bbbd-423c-8734-02dcc57fd9f0": {
+          "application": "Android приложение Blizko",
+          "body": "",
+          "title": "Почему вы перестали пользоваться Близко? Поделитесь своим мнением — за участие в интервью подарим 1000 ₽. Запишитесь через анкету."
+        },
+        "e6ddca1d-a255-41db-9575-31c1d7b89df5": {
+          "application": "Android приложение 05ru",
+          "body": "Сдайте старый iPhone в трейд-ин, а новый купите с рассрочкой без переплат 💫",
+          "title": "С новым — удобнее 📱"
+        },
+        "eb071cf3-526e-411f-9245-4bbe4107b133": {
+          "application": "iOS приложение 05ru",
+          "body": "Всё для праздничного стола с доставкой от 30 минут 🚚 Продукты, сладости и напитки 🍫",
+          "title": "Курбан-байрам близко 🤍"
+        },
+        "ee44ad48-4bb3-48bc-8f90-3a5996fd36af": {
+          "application": "iOS приложение Blizko",
+          "body": "Чуду, пирожки и блины от Равзы уже в Близко. Ням 😋",
+          "title": "Любимый вкус ✨"
+        },
+        "ef2027ae-c913-44e4-9044-4206f0b3c83d": {
+          "application": "iOS приложение 05ru",
+          "body": "Пока на улице ещё терпимо, самое время подумать о прохладе дома. Скидка до 10% на кондиционеры 🌬️",
+          "title": "Комфорт заранее 🏠"
+        },
+        "ef5d6067-cbd7-4d6b-b639-668fd51c4819": {
+          "application": "Android приложение Blizko",
+          "body": "Самое время взять комбо с чипсами и любимыми напитками 🔥",
+          "title": "ЧМ уже в разгаре ⚽"
+        },
+        "f3d9225b-52fc-4bef-8f8d-5cb8dede3dba": {
+          "application": "Android приложение 05ru",
+          "body": "Лучше заказать заранее с доставкой из маркетплейса",
+          "title": "Вода почти закончилась?"
+        },
+        "f61082ac-d793-4e0a-9da8-95c38c5a2795": {
+          "application": "Android приложение Blizko",
+          "body": "На сайте и в приложении могут быть перебои. Мы уже работаем над этим и скоро всё поправим.",
+          "title": "Немного технических помех"
+        },
+        "f614f8f3-0f90-4bd0-a3db-1a2e8ac5486a": {
+          "application": "iOS приложение Blizko",
+          "body": "",
+          "title": "Заберите промокод за пару минут: ответьте на несколько вопросов о первом заказев Близко, а в конце получите новую скидку 💚"
+        },
+        "f6cc866b-33cf-44ec-9d4b-b6dbe5f22a7a": {
+          "application": "iOS приложение 05ru",
+          "body": "Позаботьтесь о прохладе заранее — скидка до 10% на кондиционеры действует до 5 июля 🌬️",
+          "title": "Жара уже идёт ☀️"
+        },
+        "f8748fdd-0578-49ef-b312-da5a64b50bf5": {
+          "application": "Android приложение Blizko",
+          "body": "Комбо с чипсами и напитками уже ждёт в Близко 🥤",
+          "title": "К матчу готовы? ⚽"
+        },
+        "fae78fec-7795-450e-aa83-80734942370c": {
+          "application": "iOS приложение 05ru",
+          "body": "Забота о близких — это не ждать жары. Кондиционеры со скидкой до 10% до 5 июля ❄️",
+          "title": "Позаботьтесь вовремя ❤️"
+        },
+        "fc18cd7d-6d66-405b-a8fb-ec3a403d980a": {
+          "application": "iOS приложение 05ru",
+          "body": "Мясо, напитки, уголь, посуда и всё для пикника в одном заказе 🍖",
+          "title": "На пикник с комфортом 🧺"
+        },
+        "fca1e0a0-efe5-4763-9534-086b543366a0": {
+          "application": "Android приложение Blizko",
+          "body": "",
+          "title": "Заберите промокод за пару минут: ответьте на несколько вопросов о первом заказев Близко, а в конце получите новую скидку 💚"
+        },
+        "fe9ddb59-9449-4cf1-835e-cd5bab556661": {
+          "application": "Android приложение Blizko",
+          "body": "Чемпионат мира — отличный повод взять комбо с чипсами и любимым напитком 🥤",
+          "title": "Пора запасаться ⚽"
+        },
+        "ffdec267-74fa-4dd2-879a-f17ae850ee5a": {
+          "application": "Android приложение Blizko",
+          "body": "",
+          "title": "Заберите промокод за пару минут: ответьте на несколько вопросов о первом заказев Близко, а в конце получите новую скидку 💚"
+        }
+      },
+      "sha256": "201cc32289db5b6431f2aeb0337afa0274c3617e01e4bc7dc5e31dfb3f702c28"
+    },
+    "data/trigger_content.json": {
+      "content": {},
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    "data/trigger_project_rules.json": {
+      "content": {
+        "excludedMailingIds": [
+          "e136932b-32a1-4f56-80cf-3635c2270f4a"
+        ],
+        "folderRules": {
+          "34aec65b-8416-473d-bbe9-7f1e35bb533e": "05-main",
+          "4": "05-main",
+          "566cbb33-d8a9-4df7-b15f-99f45e21d0e0": "blizko-app"
+        },
+        "mailingOverrides": {
+          "6c09cf1a-9883-4023-ab54-e440b01288ec": "blizko-app",
+          "ae9c788e-bbb7-4d25-9fff-5b028f8f0d92": "blizko-app"
+        }
+      },
+      "sha256": "38f519017b68e1395e6de988941f30bdb0ddf6f41b877c279914488b99babb00"
+    }
+  },
+  "observedProjectFolders": [
+    {
+      "internalId": "b4476805-41cf-4e89-a51f-cd88c25ef859",
+      "name": "Пуши по 05ру в приложении 05ру",
+      "parentInternalId": null,
+      "sourceRowversionAt": "2026-07-29T18:34:39.483000+00:00",
+      "systemName": "PushiPo05ruVPrilozhenii05ru"
+    },
+    {
+      "internalId": "88976d9a-80ba-47e0-b514-32b833ba3350",
+      "name": "Пуши по Близко в приложении 05ру",
+      "parentInternalId": null,
+      "sourceRowversionAt": "2026-07-29T18:34:56.503000+00:00",
+      "systemName": "PushiPoBlizkoVPrilozhenii"
+    },
+    {
+      "internalId": "5973dc8f-9411-4de3-a53b-32c87497812c",
+      "name": "Пуши в отдельном приложении Близко",
+      "parentInternalId": null,
+      "sourceRowversionAt": "2026-07-29T18:35:11.067000+00:00",
+      "systemName": "PushiVOtdelnomPrilozhenii"
+    }
+  ],
+  "projectFolderChecks": [
+    {
+      "exactActiveMatches": 1,
+      "expectedInternalId": "b4476805-41cf-4e89-a51f-cd88c25ef859",
+      "expectedProjectId": "05-main",
+      "name": "Пуши по 05ру в приложении 05ру",
+      "parentInternalIds": []
+    },
+    {
+      "exactActiveMatches": 1,
+      "expectedInternalId": "88976d9a-80ba-47e0-b514-32b833ba3350",
+      "expectedProjectId": "blizko-in-05",
+      "name": "Пуши по Близко в приложении 05ру",
+      "parentInternalIds": []
+    },
+    {
+      "exactActiveMatches": 1,
+      "expectedInternalId": "5973dc8f-9411-4de3-a53b-32c87497812c",
+      "expectedProjectId": "blizko-app",
+      "name": "Пуши в отдельном приложении Близко",
+      "parentInternalIds": []
+    }
+  ]
+}

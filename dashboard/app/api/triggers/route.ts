@@ -140,7 +140,6 @@ export async function GET() {
         7 * 24 * 60 * 60 * 1000
       : 0;
     const accumulators = new Map<string, MetricAccumulator>();
-    const selectionAccumulators = new Map<string, MetricAccumulator>();
     const mailingProject = new Map(
       effectiveMailings.map((mailing) => [
         mailing.id,
@@ -175,34 +174,6 @@ export async function GET() {
       metric.latency[latencyIndex] += 1;
       accumulators.set(key, metric);
     };
-    const addSelection = (
-      period: string,
-      goalId: string,
-      orderProjectId: string,
-      pushProjectId: string,
-      order: OrderRow,
-    ) => {
-      const key = `${period}:${goalId}:${orderProjectId}:${pushProjectId}`;
-      const metric = selectionAccumulators.get(key) ?? {
-        orders: 0,
-        buyers: new Set<string>(),
-        revenue: 0,
-        latency: [0, 0, 0, 0],
-      };
-      metric.orders += 1;
-      metric.buyers.add(order.buyer_key);
-      metric.revenue += Number(order.revenue);
-      const latencyIndex =
-        Number(order.latency_minutes) <= 60
-          ? 0
-          : Number(order.latency_minutes) <= 240
-            ? 1
-            : Number(order.latency_minutes) <= 720
-              ? 2
-              : 3;
-      metric.latency[latencyIndex] += 1;
-      selectionAccumulators.set(key, metric);
-    };
 
     for (const order of orders) {
       if (!mailingProject.has(order.scenario_mailing_id)) continue;
@@ -211,30 +182,13 @@ export async function GET() {
         periods.push("7d");
       }
       for (const period of periods) {
-        for (const selectedOrderProject of [
+        add(
+          order.scenario_mailing_id,
+          period,
+          order.goal_id,
           order.order_project_id,
-          "all",
-        ]) {
-          add(
-            order.scenario_mailing_id,
-            period,
-            order.goal_id,
-            selectedOrderProject,
-            order,
-          );
-          for (const selectedPushProject of [
-            mailingProject.get(order.scenario_mailing_id) ?? "all",
-            "all",
-          ]) {
-            addSelection(
-              period,
-              order.goal_id,
-              selectedOrderProject,
-              selectedPushProject,
-              order,
-            );
-          }
-        }
+          order,
+        );
       }
     }
 
@@ -263,22 +217,6 @@ export async function GET() {
           name: goal.name,
           shortName: goal.short_name,
         })),
-        selectionOrderMetrics: [
-          ...selectionAccumulators.entries(),
-        ].map(([key, metric]) => {
-          const [period, goalId, orderProjectId, pushProjectId] =
-            key.split(":");
-          return {
-            period,
-            goalId,
-            orderProjectId,
-            pushProjectId,
-            orders: metric.orders,
-            buyers: metric.buyers.size,
-            revenue: metric.revenue,
-            latency: metric.latency,
-          };
-        }),
         messages: effectiveMailings.map((mailing) => ({
           id: mailing.id,
           scenarioId: mailing.scenario_id,

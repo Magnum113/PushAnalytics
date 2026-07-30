@@ -1,0 +1,112 @@
+{
+  "checks": [
+    {
+      "code": "required_files",
+      "detail": "missing=[]",
+      "passed": true
+    },
+    {
+      "code": "artifact_hashes",
+      "detail": "mismatches=[]",
+      "passed": true
+    },
+    {
+      "code": "config_hash",
+      "detail": "manifest and configuration hashes must match",
+      "passed": true
+    },
+    {
+      "code": "git_commit",
+      "detail": "head=91a7863efcb828d23f9de279293a2947614ff364",
+      "passed": true
+    },
+    {
+      "code": "project_folder_count",
+      "detail": "observed=3",
+      "passed": true
+    },
+    {
+      "code": "project_folders_exact",
+      "detail": "invalid=[]",
+      "passed": true
+    },
+    {
+      "code": "supabase_quality",
+      "detail": "nonZero={}",
+      "passed": true
+    },
+    {
+      "code": "published_trace_count",
+      "detail": "traces=113 diagnostics=113",
+      "passed": true
+    },
+    {
+      "code": "pii_free_keys",
+      "detail": "invalidHashKeys=[]",
+      "passed": true
+    },
+    {
+      "code": "golden_winners",
+      "detail": "invalidOrders=[]",
+      "passed": true
+    },
+    {
+      "code": "golden_click_window",
+      "detail": "invalidOrders=[]",
+      "passed": true
+    },
+    {
+      "code": "golden_click_ordering",
+      "detail": "invalidOrders=[]",
+      "passed": true
+    },
+    {
+      "code": "mass_push_sample",
+      "detail": "massPushes=11",
+      "passed": true
+    },
+    {
+      "code": "all_trigger_pushes",
+      "detail": "golden=8 supabase=8",
+      "passed": true
+    },
+    {
+      "code": "order_project_samples",
+      "detail": "counts={'05-main': 32, 'blizko-app': 57, 'blizko-in-05': 24}",
+      "passed": true
+    },
+    {
+      "code": "known_campaigns",
+      "detail": "found=['За окном +30', 'К матчу готовы']",
+      "passed": true
+    },
+    {
+      "code": "diagnostic_cases",
+      "detail": "missing=[]",
+      "passed": true
+    },
+    {
+      "code": "zero_order_push",
+      "detail": "count=7",
+      "passed": true
+    },
+    {
+      "code": "no_obvious_pii_or_secrets",
+      "detail": "hits={'emails': 0, 'phones': 0, 'secretAssignments': 0}",
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "status": "passed_with_warnings",
+  "warnings": [
+    "В опубликованных заказах нет события ровно на 0/1440-й минуте; зафиксирован ближайший доступный случай (1439 мин.).",
+    "CDP.MergedCustomers: локальный кэш v693, доступный Delta v694.",
+    "Mailings.CustomerMessagesStatuses: локальный кэш v2154, доступный Delta v2164.",
+    "Mailings.Mailings: локальный кэш v666, доступный Delta v667.",
+    "PDP.ProductExternalIds: локальный кэш v63, доступный Delta v69.",
+    "ProcessingOrders.Orders: локальный кэш v1493, доступный Delta v1495.",
+    "ProcessingOrders.PointsOfContact: локальный кэш v730, доступный Delta v731.",
+    "ProcessingOrders.PurchaseStatuses: локальный кэш v255, доступный Delta v685.",
+    "ProcessingOrders.Purchases: локальный кэш v1506, доступный Delta v1508."
+  ]
+}

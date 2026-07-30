@@ -1,0 +1,25 @@
+{
+  "artifactHashes": {
+    "configuration.json": "18054f9603a3be6f8c818e5da3ecf5c2971e44cafd3534288921623061190198",
+    "golden_diagnostics.json": "5c2ceb0ea4d6f8f454fcde99f705557ed906f14c6dfc9558ef119cc8ebc18f7e",
+    "golden_traces.json": "f2ca9820ef4ffdc9f2620101f7840baa87af5846afde8021a78dd10d634a3492",
+    "supabase_snapshot.json": "1fff8cdd929d70aea6553284bfbe32fd9055c89e47b0e89a2c13027514aac159"
+  },
+  "configHash": "fa9e507866382223c9e173c9484b7e8e9f5241a660bac754a230eef06b01fc18",
+  "diagnosticCasesPerType": 10,
+  "gitCommit": "91a7863efcb828d23f9de279293a2947614ff364",
+  "knownCampaigns": {
+    "За окном +30": {
+      "05-main": 9,
+      "blizko-app": 17,
+      "blizko-in-05": 24
+    },
+    "К матчу готовы": {
+      "blizko-app": 14
+    }
+  },
+  "massPushesMinimum": 10,
+  "projectOrderMinimum": 20,
+  "publishedGoldenOrders": 113,
+  "triggerPushes": 8
+}

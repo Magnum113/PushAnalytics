@@ -246,6 +246,57 @@ td,
   flex-basis: 290px;
 }
 
+.project-multi-filter {
+  flex: 1 0 100%;
+  gap: 7px;
+  border-right: 0;
+  border-bottom: 1px solid var(--line);
+  padding-block: 14px;
+}
+
+.project-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.project-chip-list button {
+  min-height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--canvas);
+  padding: 0 12px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.project-chip-list button:hover {
+  border-color: rgba(10, 156, 96, 0.35);
+  color: var(--ink);
+}
+
+.project-chip-list button.selected {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.project-chip-list button:focus-visible {
+  outline: 3px solid rgba(10, 156, 96, 0.24);
+  outline-offset: 2px;
+}
+
+.project-scope-note {
+  color: var(--green-dark);
+  font-size: 12px;
+  font-weight: 650;
+}
+
 .search-filter {
   border-right: 0;
 }

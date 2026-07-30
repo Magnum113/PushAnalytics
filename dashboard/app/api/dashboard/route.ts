@@ -180,10 +180,8 @@ export async function GET() {
         generatedAt,
         source: "supabase",
         sourceNote:
-          "Агрегаты и обезличенные покупки загружены из Mindbox в Supabase. Доставка рассчитана как Sent − NotDelivered. Текст и приложение проверены в карточках рассылок Mindbox.",
+          "Агрегаты и обезличенные покупки загружены из Mindbox в Supabase. Покупки учитываются только когда их проект совпадает с эффективным проектом пуша. Доставка рассчитана как Sent − NotDelivered.",
         defaultGoalId: "all-orders",
-        defaultProjectId: "all",
-        defaultOrderProjectId: "all",
         attribution: {
           windowHours: attributionWindow,
           model: "Последний клик",

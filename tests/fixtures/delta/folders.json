@@ -1,0 +1,37 @@
+[
+  {
+    "internalId": "root-05",
+    "name": "Пуши по 05ру в приложении 05ру",
+    "parentInternalId": null,
+    "_isDeleted": false,
+    "_rowversion_ts": "2026-07-29T18:34:39.483Z"
+  },
+  {
+    "internalId": "root-in05",
+    "name": "Пуши по Близко в приложении 05ру",
+    "parentInternalId": null,
+    "_isDeleted": false,
+    "_rowversion_ts": "2026-07-29T18:34:56.503Z"
+  },
+  {
+    "internalId": "root-app",
+    "name": "Пуши в отдельном приложении Близко",
+    "parentInternalId": null,
+    "_isDeleted": false,
+    "_rowversion_ts": "2026-07-29T18:35:11.067Z"
+  },
+  {
+    "internalId": "child-app",
+    "name": "Июль",
+    "parentInternalId": "root-app",
+    "_isDeleted": false,
+    "_rowversion_ts": "2026-07-29T18:36:00Z"
+  },
+  {
+    "internalId": "deleted-child",
+    "name": "Удаленная",
+    "parentInternalId": "root-app",
+    "_isDeleted": true,
+    "_rowversion_ts": "2026-07-29T18:37:00Z"
+  }
+]

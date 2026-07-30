@@ -1,0 +1,21 @@
+{
+  "diagnosticCaseCounts": {
+    "closestInside24h": 10,
+    "lastClickOutside24h": 10,
+    "massTriggerCompetition": 10,
+    "noPriorMobilePushClick": 10,
+    "transactionWinner": 10
+  },
+  "mergeCycles": [],
+  "missingRawOrders": [],
+  "publishedCandidates": 817,
+  "rawCounts": {
+    "mobileMailings": 1806,
+    "mobilePushClicks": 354637,
+    "ordersSince": 65865,
+    "qualifyingAllOrders": 60031
+  },
+  "selectedPublishedOrders": 113,
+  "tracedPublishedOrders": 113,
+  "winnerMismatches": []
+}

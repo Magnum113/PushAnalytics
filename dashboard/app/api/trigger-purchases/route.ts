@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { supabaseRows } from "@/lib/supabase-server";
+import { pgMetaQuery, supabaseRows } from "@/lib/supabase-server";
 
 type OrderRow = {
   id: number;
@@ -45,29 +45,40 @@ export async function GET(request: NextRequest) {
     request.nextUrl.searchParams.get("scenarioMailingId"),
   );
   const goalId = request.nextUrl.searchParams.get("goalId") ?? "";
-  const orderProjectId =
-    request.nextUrl.searchParams.get("orderProjectId") ?? "all";
   const period = request.nextUrl.searchParams.get("period") ?? "all";
   if (
     !Number.isSafeInteger(scenarioMailingId) ||
     scenarioMailingId <= 0 ||
     !/^[a-z0-9-]+$/.test(goalId) ||
-    !/^(all|[a-z0-9-]+)$/.test(orderProjectId) ||
     !/^(all|7d|20\d{2}-\d{2})$/.test(period)
   ) {
     return NextResponse.json({ error: "Некорректный запрос" }, { status: 400 });
   }
 
   try {
+    const [mailing] = await pgMetaQuery<{ project_id: string }>(`
+      select
+        coalesce(manual.project_id, mailing.project_id) as project_id
+      from public.push_scenario_mailings as mailing
+      left join public.push_manual_overrides as manual
+        on manual.source_kind = 'trigger'
+       and manual.scenario_mailing_id = mailing.id
+      where mailing.id = ${scenarioMailingId}
+      limit 1
+    `);
+    if (!mailing) {
+      return NextResponse.json(
+        { error: "Trigger-пуш не найден" },
+        { status: 404 },
+      );
+    }
     const baseFilters: Record<string, string> = {
       select:
         "id,order_key,buyer_key,purchased_at,attributed_click_at,latency_minutes,revenue,order_project_id",
       scenario_mailing_id: `eq.${scenarioMailingId}`,
       goal_id: `eq.${goalId}`,
+      order_project_id: `eq.${mailing.project_id}`,
       order: "purchased_at.desc",
-      ...(orderProjectId === "all"
-        ? {}
-        : { order_project_id: `eq.${orderProjectId}` }),
     };
     if (/^20\d{2}-\d{2}$/.test(period)) {
       const [year, month] = period.split("-").map(Number);
